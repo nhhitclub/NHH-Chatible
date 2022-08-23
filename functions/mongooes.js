@@ -2,8 +2,10 @@ const {Schema,model} = require("mongoose")
 
 
 const userSchema = new Schema({
-    userID:{type:String},
-    blockReason:{type:String}
+    userID:String,
+    isBlocked:Boolean,
+    blockReason:String,
+    blokVaildThrow:String
 
 })
 

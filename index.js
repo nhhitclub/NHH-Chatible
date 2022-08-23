@@ -9,7 +9,12 @@ const {User} = require("./functions/mongooes")
 
 const messenger = new FacebookControler(process.env.MESS_API)
 const app = new express()
-mongoose.connect(process.env.MONGODB)
+
+const db = mongoose.connection;
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }).then(() => console.log('DB Connected!'));
+db.on('error', (err) => {
+    console.log('DB connection error:', err.message);
+})
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +25,6 @@ app.listen(3001)
 app.get("/webhook", (req,res) => {
 
   let VERIFY_TOKEN = 'connaingoicanhcontronconnaithaytheliemtaicontron';
-
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
@@ -41,11 +45,11 @@ app.post("/webhook", (req, res) => {
     if(!body.object === "page") return res.sendStatus(404);
 
     console.log(`\u{1F7EA} Received webhook:`);
-    console.dir(body, { depth: null });
+    // console.dir(body, { depth: null });
     res.status(200).send("EVENT_RECEIVED");
     body.entry.forEach(entries => {
       entries.messaging.forEach(mess =>{
-        // console.log(mess)
+        console.log(mess)
         if("read" in mess) handleReadEvent(mess)
         if("message" in mess) handleMessageEvent(mess)
         if("postback" in mess) handlePostbackEvent(mess)
@@ -56,6 +60,10 @@ app.post("/webhook", (req, res) => {
 
 })
 
+async function handlePostbackEvent(mess){
+  require("./handler/postback/NEW_USER_START").run(mess)
+
+}
 
 async function handleReadEvent(mess) {
   
@@ -66,7 +74,7 @@ async function handleMessageEvent(mess) {
   console.log(userID)
   let userInDB = await User.find({userID})
   console.log(userInDB)
-  if(userInDB=[]) {
+  if(userInDB===[]) {
     messenger.sendMessage(userID,new messageBuilder().addGenericTemplate(new templateBuilder().setTitle("🤗 Chào mừng bạn lần đầu đã đến với NHH Chatible").setSubtitle("Trước hết, bạn cần phải chấp nhận điều khoản sử dụng của hệ thống").addWebviewButton("Điều khoản sử dụng","https://google.com").addPostbackButton("Tôi đồng ý","NEW_USER_START").data).message)
   }  
   
