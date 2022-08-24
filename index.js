@@ -7,6 +7,8 @@ const {User} = require("./functions/mongooes")
 
 
 
+
+
 const messenger = new FacebookControler(process.env.MESS_API)
 const app = new express()
 
@@ -61,7 +63,7 @@ app.post("/webhook", (req, res) => {
 })
 
 async function handlePostbackEvent(mess){
-  require("./handler/postback/NEW_USER_START").run(mess)
+  require("./handler/postback/NEW_USER_START").run(mess,messenger)
 
 }
 
@@ -74,9 +76,21 @@ async function handleMessageEvent(mess) {
   console.log(userID)
   let userInDB = await User.find({userID})
   console.log(userInDB)
-  if(userInDB===[]) {
-    messenger.sendMessage(userID,new messageBuilder().addGenericTemplate(new templateBuilder().setTitle("🤗 Chào mừng bạn lần đầu đã đến với NHH Chatible").setSubtitle("Trước hết, bạn cần phải chấp nhận điều khoản sử dụng của hệ thống").addWebviewButton("Điều khoản sử dụng","https://google.com").addPostbackButton("Tôi đồng ý","NEW_USER_START").data).message)
-  }  
+  if(await  userInDB.length === 0){
+    messenger.sendMessage(userID,new messageBuilder().addGenericTemplate(new templateBuilder()
+    .setTitle("🤗 Chào mừng bạn lần đầu đã đến với NHH Chatible")
+    .setSubtitle("Trước hết, bạn cần phải chấp nhận điều khoản sử dụng của hệ thống")
+    .addWebviewButton("Điều khoản sử dụng","https://youtu.be/dQw4w9WgXcQ")
+    .addPostbackButton("Tôi đồng ý","NEW_USER_START").data).message)
+  }else{
+    if(userInDB[0].currentChat === ""){
+      messenger.sendMessage(userID,new messageBuilder().addGenericTemplate(new templateBuilder()
+    .setTitle("🤗 Chào mừng bạn đã quay trở lại với NHH Chatible")
+    .setSubtitle("Để bắt đầu, hãy bấm vào nút bên dưới:vv")
+    .addPostbackButton("Bắt đầu","CHAT_REQUEST").data).message)
+    }
+  }
+    
   
 
   
