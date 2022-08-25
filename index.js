@@ -10,7 +10,7 @@ const queueManager = new queueManage()
 const messenger = new FacebookControler(process.env.MESS_API)
 const app = new express()
 
-modules.exp
+module.exports.queueManager 
 
 const db = mongoose.connection;
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }).then(() => console.log('DB Connected!'));
