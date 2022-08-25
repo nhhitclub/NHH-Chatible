@@ -4,13 +4,13 @@ const superagent = require("superagent")
 let mongoose = require('mongoose');
 const {FacebookControler,templateBuilder,messageBuilder} = require("./functions/facebook")
 const {User} = require("./functions/mongooes")
+const queueManage = require("./functions/queueManager")
 
-
-
-
-
+const queueManager = new queueManage()
 const messenger = new FacebookControler(process.env.MESS_API)
 const app = new express()
+
+modules.exp
 
 const db = mongoose.connection;
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }).then(() => console.log('DB Connected!'));
