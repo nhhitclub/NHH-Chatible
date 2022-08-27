@@ -1,15 +1,18 @@
 require("dotenv").config()
 const express = require("express")
 const superagent = require("superagent")
-const mongoose = require('mongoose');
-const { FacebookController, TemplateBuilder, MessageBuilder } = require("./functions/facebook")
-const { User } = require("./functions/mongooes")
-const { NewUserRequestHandle } = require("./handlers/NewUserRequestHandle")
-const { ContinueChattingHandle } = require("./handlers/ContinueChattingHandle")
+let mongoose = require('mongoose');
+const {FacebookControler,templateBuilder,messageBuilder} = require("./functions/facebook")
+const {User} = require("./functions/mongooes")
 
 
-const messenger = new FacebookController(process.env.MESS_API)
+
+
+
+const messenger = new FacebookControler(process.env.MESS_API)
 const app = new express()
+
+module.exports.queueManager 
 
 const db = mongoose.connection;
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }).then(() => console.log('DB Connected!'));
