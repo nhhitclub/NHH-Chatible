@@ -11,4 +11,4 @@ const NewUserRequestHandle = async (messenger, userID, callback = () => {}) => {
     callback();
 }
 
-module.exports = { NewUserRequestHandle }
+module.exports = NewUserRequestHandle

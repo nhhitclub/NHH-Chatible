@@ -10,4 +10,4 @@ const ContinueChattingHandle = async (messenger, userID, callback = () => {}) =>
     callback();
 }
 
-module.exports = { ContinueChattingHandle }
+module.exports = ContinueChattingHandle
