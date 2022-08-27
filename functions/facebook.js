@@ -1,90 +1,93 @@
 require("dotenv").config()
 const superagent = require("superagent")
+const ENDPOINT = "https://graph.facebook.com/v14.0"
 
-class FacebookControler{
-    constructor(accessToken){
+class FacebookController {
+    messageEndpoint = ENDPOINT + '/me/messages'
+
+    constructor(accessToken) {
         this.accessToken = accessToken
-        this.endPoint = "https://graph.facebook.com/v14.0"
     }
-    
-    async sendMessage(userID,messagePayload){
-        let body_data = {
-            recipient:{ id:userID},
-            message:
-                messagePayload
-            }
-          console.log(body_data)
+
+    async sendMessage(userID, messagePayload) {
+        
+        const body_data = {
+            recipient: { id: userID },
+            message: messagePayload
+        }
+
         superagent
-        .post(this.endPoint+'/me/messages')
-        .query({access_token:process.env.MESS_API})
-        .send(body_data)
-        .end((err,data)=>{
-            if(err) console.log(err)
-        })
+            .post(messageEndpoint)
+            .query({ access_token: process.env.MESS_API })
+            .send(body_data)
+            .end(err => {
+                if (err) console.log(err)
+            })
+
+    }
+
+    async sendMessageUsingTemplate(templateBuilder, userID) {
+        const messageBuilder = new MessageBuilder().addGenericTemplate(templateBuilder.data)
+        await this.sendMessage(userID, messageBuilder.message)
 
     }
 }
 
-module.exports.FacebookControler = FacebookControler
+class TemplateBuilder {
 
-class templateBuilder{
-    constructor(){
-        this.data = {}
+    constructor() {
+        this.data = {
+            buttons: []
+        }
     }
-    /**
-     * Function to set the Title of Template
-     * 
-     * @param {String} title 
-     * @returns this <templateBuilder>
-     */
-    setTitle(title){
+    
+    
+    setTitle(title) {
         this.data.title = title
         return this
     }
-    setSubtitle(subtitle){
+    setSubtitle(subtitle) {
         this.data.subtitle = subtitle
         return this
     }
-    addPostbackButton(title,payload){
-        if(!this.data.buttons) this.data.buttons = []
-        this.data.buttons.push({type:"postback", title,payload})
+    addPostbackButton(title, payload) {
+        this.data.buttons.push({ type: "postback", title, payload })
         return this
     }
-    addWebviewButton(title,url){
-        if(!this.data.buttons) this.data.buttons = []
-        this.data.buttons.push({type:"web_url", title,url})
+    addWebviewButton(title, url) {
+        this.data.buttons.push({ type: "web_url", title, url })
         return this
     }
 }
 
-module.exports.templateBuilder = templateBuilder
+class MessageBuilder {
 
-class messageBuilder{
-    constructor(){
+    constructor() {
         this.message = {
-
+            attachment: {}
         }
     }
-    addText(textValue){
-        this.message.text= textValue
+    addText(textValue) {
+        this.message.text = textValue
         return this
     }
-    addUrlAttachment(type,url){
-        this.message.attachment= {
+    addUrlAttachment(type, url) {
+        this.message.attachment = {
             type,
-            payload:{
-                url,is_reusable:false
+            payload: {
+                url, is_reusable: false
             }
         }
         return this
     }
-    addGenericTemplate(templateBuilder){
-        if(!this.message.attachment || this.message.attachment ==={}) this.message.attachment= {type:"template",payload:{template_type:"generic",elements:[]}}
+    addGenericTemplate(templateBuilder) {
+        if (this.message.attachment === {}) 
+            this.message.attachment = { type: "template", payload: { template_type: "generic", elements: [] } }
         this.message.attachment.payload.elements.push(templateBuilder)
         return this
     }
-    
+
 }
 
-module.exports.messageBuilder = messageBuilder
+module.exports = { MessageBuilder, TemplateBuilder, FacebookController }
 

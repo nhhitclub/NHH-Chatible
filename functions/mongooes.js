@@ -1,26 +1,30 @@
-const {Schema,model} = require("mongoose")
+const { Schema, model } = require("mongoose")
 
 
 const userSchema = new Schema({
-    userID:String,
-    isBlocked:Boolean,
-    blockReason:String,
-    blokVaildThrow:String,
-    currentChat:String
+    userID: String,
+    isBlocked: Boolean,
+    blockReason: String,
+    blockExpiry: String,
+    currentChatID: String
 })
 
-module.exports.User = model('User', userSchema)
-
-
 const chatSchema = new Schema({
-    chatID:String,
-    peopleInChat:[String],
-    chatMess:[{
-        sender:String,
-        messType:String,
-        text:String,
-        attachmentURL:String
+    chatID: String,
+    members: [String],
+    chatMess: [{
+        sender: String,
+        messType: String,
+        text: String,
+        attachmentURL: String
     }]
 })
 
-module.exports.User = model('User', userSchema)
+
+
+const User = model('User', userSchema)
+const Chat = model('Chat', chatSchema)
+
+
+
+module.exports = { User, Chat }
