@@ -1,16 +1,16 @@
 
-class QueueManager{
-    constructor(){
-        this.queue = []
-    }
-    addUserToQueue(userID){
+export class QueueManager{
+
+    private queue: any = [];
+
+    addUserToQueue(userID: string): QueueManager{
         this.queue.push(userID)
         return this
     }
-    rmUserFromQueue(userID){
-        var index = this.queue.indexOf(userID);
+    rmUserFromQueue(userID: string): QueueManager{
+        var index = this.queue.indexOf(userID)
         if (index > -1) {
-            this.queue.splice(index, 1);
+            this.queue.splice(index, 1)
         }
         return this
     }
@@ -20,18 +20,21 @@ class QueueManager{
     randomUserInQueue(){
         return this.queue[Math.floor(Math.random()*this.queue.length)]
     }
-    popUserToChat(){
-        let numOfChat = Math.floor((this.queue.length -(this.queue.length % 2))/2)
+    popUserToChat(): Array<any>{
+        const numOfChat = Math.floor((this.queue.length -(this.queue.length % 2))/2)
         
-        let list = []
+        const list: Array<any> = []
         for(let index = 0; index < numOfChat; index++){
-            let chat = []
-            let user1 = this.randomUserInQueue()
+            const chat = []
+
+            const user1 = this.randomUserInQueue()
             this.rmUserFromQueue(user1)
             chat.push(user1)
-            let user2 = this.randomUserInQueue()
+
+            const user2 = this.randomUserInQueue()
             this.rmUserFromQueue(user2)
             chat.push(user2)
+
             console.log(user1+":"+user2)
             list.push(chat)
         }
@@ -39,6 +42,3 @@ class QueueManager{
     }
     
 }
-
-
-module.exports = QueueManager;

@@ -1,7 +1,7 @@
-const { Schema, model } = require("mongoose")
+import { Schema, model } from "mongoose"
 
 
-const userSchema = new Schema({
+const userSchema: Schema = new Schema({
     userID: String,
     isBlocked: Boolean,
     blockReason: String,
@@ -9,7 +9,7 @@ const userSchema = new Schema({
     currentChatID: String
 })
 
-const chatSchema = new Schema({
+const chatSchema: Schema = new Schema({
     chatID: String,
     members: [String],
     chatMess: [{
@@ -25,6 +25,4 @@ const chatSchema = new Schema({
 const User = model('User', userSchema)
 const Chat = model('Chat', chatSchema)
 
-
-
-module.exports = { User, Chat }
+export { User, Chat }
