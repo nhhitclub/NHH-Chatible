@@ -3,10 +3,9 @@ const express = require("express")
 const superagent = require("superagent")
 let mongoose = require('mongoose');
 const { FacebookController } = require("./functions/facebook")
-const { User } = require("./functions/mongooes")
 const QueueManager = require("./functions/queueManager")
-const NewUserRequestHandle = require("./handlers/NewUserRequestHandle")
-const ContinueChattingHandle = require("./handlers/ContinueChattingHandle")
+
+const handlePostbackEvent = require("./handlers/postback/EXISTED_USER_START")
 
 const queueManager = new QueueManager()
 const messenger = new FacebookController(process.env.MESS_API)
@@ -27,13 +26,12 @@ app.listen(3001)
 
 app.get("/webhook", (req, res) => {
 
-  const VERIFY_TOKEN = 'connaingoicanhcontronconnaithaytheliemtaicontron';
   const mode = req.query['hub.mode'];
   const token = req.query['hub.verify_token'];
   const challenge = req.query['hub.challenge'];
   console.log(`🟨 Received Verify Request`);
 
-  if (mode && token === VERIFY_TOKEN) {
+  if (mode && token === process.env.VERIFY_TOKEN) {
 
     res.status(200).send(challenge);
   } else {
@@ -43,48 +41,21 @@ app.get("/webhook", (req, res) => {
 
 
 app.post("/webhook", (req, res) => {
-  const body = req.body;
-  if (!body.object === "page") return res.sendStatus(404);
+  if (!req.body.object === "page") return res.sendStatus(404);
 
-  console.log('hi =)')
-
-  console.log(`\u{1F7EA} Received webhook:`);
   res.status(200).send("EVENT_RECEIVED");
   body.entry.forEach(entries => {
     entries.messaging.forEach(mess => {
       console.log(mess)
       if ("read" in mess) handleReadEvent(mess)
-      if ("message" in mess) handleMessageEvent(mess)
-      if ("postback" in mess) handlePostbackEvent(mess)
+      if ("message" in mess) handleMessageEvent(messenger, mess)
+      if ("postback" in mess) handlePostbackEvent(messenger, mess)
       if ("attachments" in mess) handleAttachmentsEvent(mess)
     })
   });
 
-
 })
 
-async function handlePostbackEvent(mess) {
-  require("./handler/postback/NEW_USER_START").run(mess, messenger)
 
-}
-
-async function handleReadEvent(mess) {
-
-}
-
-async function handleMessageEvent(mess) {
-  console.log('haiyaa')
-  const userID = mess.sender.id
-  const userInDB = await User.find({ userID })
-
-
-  if (userInDB.length === 0) {
-    return await NewUserRequestHandle(messenger, userID)
-  }
-  if (userInDB[0].currentChat === "") {
-    return await ContinueChattingHandle(messenger, userID)
-  }
-}
-
-async function sendMessage(userID, payloads) {
-}
+async function handleReadEvent(mess) { }
+async function handleAttachmentsEvent(mess) { }

@@ -10,10 +10,10 @@ class FacebookController {
     }
 
     async sendMessage(userID, messagePayload) {
-        
+
         const body_data = {
             recipient: { id: userID },
-            message: messagePayload
+            message: messagePayload.message
         }
 
         superagent
@@ -26,9 +26,13 @@ class FacebookController {
 
     }
 
+    async sendTextOnlyMessage(userID, message) {
+        await this.sendMessage(userID, new MessageBuilder().addText(message))
+    }
+
     async sendMessageUsingTemplate(templateBuilder, userID) {
-        const messageBuilder = new MessageBuilder().addGenericTemplate(templateBuilder.data)
-        await this.sendMessage(userID, messageBuilder.message)
+        const messageBuilder = new MessageBuilder().addGenericTemplate(templateBuilder)
+        await this.sendMessage(userID, messageBuilder)
 
     }
 }
@@ -40,8 +44,8 @@ class TemplateBuilder {
             buttons: []
         }
     }
-    
-    
+
+
     setTitle(title) {
         this.data.title = title
         return this
@@ -81,10 +85,14 @@ class MessageBuilder {
         return this
     }
     addGenericTemplate(templateBuilder) {
-        if (this.message.attachment === {}) 
+        if (this.message.attachment === {})
             this.message.attachment = { type: "template", payload: { template_type: "generic", elements: [] } }
-        this.message.attachment.payload.elements.push(templateBuilder)
+        this.message.attachment.payload.elements.push(templateBuilder.data)
         return this
+    }
+
+    toString() {
+        return this.message
     }
 
 }

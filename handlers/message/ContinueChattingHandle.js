@@ -1,4 +1,4 @@
-const { TemplateBuilder } = require("../functions/facebook")
+const { TemplateBuilder } = require("../../functions/facebook")
 
 const ContinueChattingHandle = async (messenger, userID, callback = () => {}) => {
     const templateBuilder = new TemplateBuilder()
