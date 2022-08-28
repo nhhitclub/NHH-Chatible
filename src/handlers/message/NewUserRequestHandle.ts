@@ -1,6 +1,6 @@
 import { FacebookController, TemplateBuilder } from "../../functions/facebook"
 
-export const NewUserRequestHandle = async (userID: string, callback = () => {}) => {
+export const NewUserRequestHandle = async (userID: string, callback: Function = () => {}) => {
     const templateBuilder = new TemplateBuilder()
       .setTitle("🤗 Chào mừng bạn lần đầu đã đến với NHH Chatible")
       .setSubtitle("Trước hết, bạn cần phải chấp nhận điều khoản sử dụng của hệ thống")
