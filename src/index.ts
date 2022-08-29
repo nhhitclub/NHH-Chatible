@@ -1,5 +1,5 @@
 require("dotenv").config();
-import * as express from "express";
+import express from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
 import { QueueManager } from "./functions/queueManager"
 

@@ -4,16 +4,14 @@ const ENDPOINT: string = "https://graph.facebook.com/v14.0";
 
 class FacebookController {
     private messageEndpoint: string = ENDPOINT + "/me/messages";
-    private accessToken: string;
     private static instance: FacebookController;
 
-    private constructor(accessToken: string) {
-        this.accessToken = accessToken;
+    private constructor() {
     }
 
     public static getInstance(): FacebookController {
         if(FacebookController.instance == null) {
-           FacebookController.instance = new FacebookController(process.env.MESS_API)
+           FacebookController.instance = new FacebookController()
         }
 
         return FacebookController.instance;
