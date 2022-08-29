@@ -1,12 +1,10 @@
 require("dotenv").config();
 import express from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
-import { QueueManager } from "./functions/queueManager"
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 
-const queueManager = new QueueManager()
 const app:express.Express = express()
 
 
@@ -39,6 +37,7 @@ app.get("/webhook", (req: express.Request, res: express.Response) => {
 
 
 app.post("/webhook", (req: express.Request, res: express.Response) => {
+
 
   if (req.body.object !== "page") return res.sendStatus(404)
   res.status(200).send("EVENT_RECEIVED")
