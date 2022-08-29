@@ -1,7 +1,7 @@
 
 export class QueueManager{
 
-    private queue: any = [];
+    private queue: Array<string> = [];
 
     addUserToQueue(userID: string): QueueManager{
         this.queue.push(userID)

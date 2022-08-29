@@ -69,14 +69,18 @@ class TemplateBuilder {
 
 class MessageBuilder {
     public message: any = {
-        attachment: {},
+        // attachment: {},
     };
 
     addText(textValue: string): MessageBuilder {
         this.message.text = textValue;
         return this;
     }
+    private preRequireAttractmentMessage() {
+        if(!this.message.attachment) this.message.attachment = {}
+    }
     addUrlAttachment(type: string, url: string): MessageBuilder {
+        this.preRequireAttractmentMessage()
         this.message.attachment = {
             type,
             payload: {
@@ -87,6 +91,7 @@ class MessageBuilder {
         return this;
     }
     addGenericTemplate(templateBuilder: TemplateBuilder): MessageBuilder {
+        this.preRequireAttractmentMessage()
         if (this.message.attachment && Object.keys(this.message.attachment).length === 0)
             this.message.attachment = {
                 type: "template",

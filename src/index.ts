@@ -3,11 +3,11 @@ import express from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
 import { QueueManager } from "./functions/queueManager"
 
-import { handlePostbackEvent } from "./handlers/postback/EXISTED_USER_START"
-import { handleMessageEvent } from "./handlers/message/handleMessageEvent"
+import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
+import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 
 const queueManager = new QueueManager()
-const app = new (express as any)()
+const app:express.Express = express()
 
 
 const db = mongoose.connection
@@ -18,11 +18,11 @@ db.on('error', (err: any) => {
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.listen(3001)
+app.listen(process.env.WEBPORT)
 
 //webhook handling
 
-app.get("/webhook", (req: any, res: any) => {
+app.get("/webhook", (req: express.Request, res: express.Response) => {
 
   const mode = req.query['hub.mode']
   const token = req.query['hub.verify_token']
@@ -38,10 +38,11 @@ app.get("/webhook", (req: any, res: any) => {
 })
 
 
-app.post("/webhook", (req: any, res: any) => {
+app.post("/webhook", (req: express.Request, res: express.Response) => {
 
   if (req.body.object !== "page") return res.sendStatus(404)
   res.status(200).send("EVENT_RECEIVED")
+  // console.dir(req.body,{depth :null})
   req.body.entry.forEach((entries: any) => {
     entries.messaging.forEach((mess: any) => {
       

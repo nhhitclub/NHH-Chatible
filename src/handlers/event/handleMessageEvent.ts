@@ -1,7 +1,7 @@
 import { User } from "../../functions/mongooes"
 
-import { NewUserRequestHandle } from "./NewUserRequestHandle"
-import { ContinueChattingHandle } from "./ContinueChattingHandle"
+import { NewUserRequestHandle } from "../message/NewUserRequestHandle"
+import { ContinueChattingHandle } from "../message/ContinueChattingHandle"
 
 export const handleMessageEvent = async (mess: any) => {
   const userID = mess.sender.id
@@ -11,7 +11,7 @@ export const handleMessageEvent = async (mess: any) => {
   if (userInDB.length === 0) {
     return await NewUserRequestHandle(userID)
   }
-  if (userInDB[0].currentChat === "") {
+  if (userInDB[0].currentChatID === "") {
     return await ContinueChattingHandle(userID)
   }
 }
