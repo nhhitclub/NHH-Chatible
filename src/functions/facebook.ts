@@ -35,7 +35,6 @@ class FacebookController {
     }
 
     public async sendTextOnlyMessage(userID: string, message: string) {
-        console.log(new MessageBuilder().addText(message))
         await this.sendMessage(userID, new MessageBuilder().addText(message));
     }
 
