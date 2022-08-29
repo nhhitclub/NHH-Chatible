@@ -2,7 +2,7 @@ import { FacebookController } from "../../functions/facebook"
 import { User } from "../../functions/mongooes"
 
 
-export async function handlePostbackEvent(mess: any) {
+export default async function handlePostbackEvent(mess: any) {
     const userID = mess.sender.id
     const userInDB = await User.find({ userID })
     const facebookControllerInstance = FacebookController.getInstance();
@@ -14,7 +14,7 @@ export async function handlePostbackEvent(mess: any) {
         userID, isBlocked: false,
         blockReason: null,
         blockExpiry: null,
-        currentChat: ""
+        currentChatID: ""
     })
 
     userRecord.save()
