@@ -7,7 +7,6 @@ export const handleMessageEvent = async (mess: any) => {
   const userID = mess.sender.id
   const userInDB = await User.find({ userID })
 
-
   if (userInDB.length === 0) {
     return await NewUserRequestHandle(userID)
   }
