@@ -4,6 +4,7 @@ import mongoose, { ConnectOptions } from 'mongoose'
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
+import { handleChatRandom } from "./cronJob/chatRandom";
 
 
 const app:express.Express = express()
@@ -60,5 +61,4 @@ async function handleReadEvent(mess: any) { }
 async function handleAttachmentsEvent(mess: any) { }
 
 
-
-// setInterval(,15000)
+setInterval(handleChatRandom, 15000)
