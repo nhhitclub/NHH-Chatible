@@ -4,14 +4,12 @@ import { QueueManager } from "../functions/queueManager";
 import { v4 as uid_v4 } from "uuid";
 
 export const handleChatRandom = async () => {
-    const facebookControllerInstance: FacebookController =
-        FacebookController.getInstance();
+    const facebookControllerInstance: FacebookController = FacebookController.getInstance();
     const queueManagerInstance: QueueManager = QueueManager.getInstance();
 
     queueManagerInstance.shuffleUserInQueue();
 
     const chatRoomList = queueManagerInstance.popUserToChat();
-    console.log(chatRoomList);
 
     chatRoomList.forEach(async (chatRoom) => {
         const chatID = uid_v4();
@@ -32,10 +30,7 @@ export const handleChatRandom = async () => {
 
 
             try {
-                facebookControllerInstance.sendMessageUsingTemplate(
-                    userChatID,
-                    template
-                );
+                facebookControllerInstance.sendMessageUsingTemplate(userChatID,template);
             }catch(e) {}
 
         });

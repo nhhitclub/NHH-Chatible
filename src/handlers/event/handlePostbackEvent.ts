@@ -5,19 +5,27 @@ import { REMOVE_FROM_QUEUE } from "../postback/REMOVE_FROM_QUEUE"
 
 export const handlePostbackEvent = async (mess: any) => {
     
-    // switch(mess.postback.payload) {
-    //     case "CHAT_REQUEST":
-    //         CHAT_REQUEST(mess) 
-    //         break
-    //     case "EXISTED_USER_START": 
-    //         EXISTED_USER_START(mess)
-    //         break
-    // }
+    switch(mess.postback.payload) {
+        case "CHAT_REQUEST": {
+            CHAT_REQUEST(mess)
+            break
+        }
+            
+        case "EXISTED_USER_START":{
+            EXISTED_USER_START(mess)
+            break
+        } 
 
-    if(mess.postback.payload == "CHAT_REQUEST") CHAT_REQUEST(mess)
-    if(mess.postback.payload == "EXISTED_USER_START") EXISTED_USER_START(mess)
-    if(mess.postback.payload == "REMOVE_FROM_QUEUE") REMOVE_FROM_QUEUE(mess)
-    if(mess.postback.payload == "END_CHAT") END_CHAT(mess)
+        case "REMOVE_FROM_QUEUE":{
+            REMOVE_FROM_QUEUE(mess)
+            break
+        } 
 
+        case "END_CHAT":{
+            END_CHAT(mess)
+            break
+        }
+            
+    }
     
 }

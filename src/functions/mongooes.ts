@@ -14,9 +14,9 @@ const chatSchema: Schema = new Schema({
     members: [String],
     chatMess: [{
         sender: String,
-        messType: String,
         text: String,
-        attachmentURL: String
+        attachmentURL: String,
+        emoji_ID:String
     }]
 })
 

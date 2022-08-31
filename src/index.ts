@@ -4,8 +4,7 @@ import mongoose, { ConnectOptions } from 'mongoose'
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
-import { handleChatRandom } from "./cronJob/chatRandom";
-
+import { handleChatRandom } from "./cronJob/chatRandom"
 
 const app:express.Express = express()
 
@@ -43,14 +42,14 @@ app.post("/webhook", (req: express.Request, res: express.Response) => {
 
   if (req.body.object !== "page") return res.sendStatus(404)
   res.status(200).send("EVENT_RECEIVED")
-  // console.dir(req.body,{depth :null})
+  console.dir(req.body,{depth :null})
   req.body.entry.forEach((entries: any) => {
     entries.messaging.forEach((mess: any) => {
       
       if ("read" in mess) handleReadEvent(mess)
       if ("message" in mess) handleMessageEvent(mess)
       if ("postback" in mess) handlePostbackEvent(mess)
-      if ("attachments" in mess) handleAttachmentsEvent(mess)
+      // if ("attachments" in mess) handleAttachmentsEvent(mess)
     })
   });
 
@@ -61,4 +60,5 @@ async function handleReadEvent(mess: any) { }
 async function handleAttachmentsEvent(mess: any) { }
 
 
-setInterval(handleChatRandom, 15000)
+
+setInterval(handleChatRandom,15000)

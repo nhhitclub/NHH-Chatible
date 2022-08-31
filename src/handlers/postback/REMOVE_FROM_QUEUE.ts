@@ -6,6 +6,7 @@ export const REMOVE_FROM_QUEUE = async (mess: any) => {
 
     const templateBuilder: TemplateBuilder = new TemplateBuilder()
     .setTitle("Đã hủy tìm kiếm")
+    .setSubtitle("Chúng tớ rất xin lỗi vì sự cố này")
     .addPostbackButton("Tìm kiếm lại", "CHAT_REQUEST")
 
     await FacebookController.getInstance().sendMessageUsingTemplate(mess.sender.id, templateBuilder)
