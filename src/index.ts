@@ -5,6 +5,7 @@ import mongoose, { ConnectOptions } from 'mongoose'
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 
+
 const app:express.Express = express()
 
 
@@ -57,3 +58,7 @@ app.post("/webhook", (req: express.Request, res: express.Response) => {
 
 async function handleReadEvent(mess: any) { }
 async function handleAttachmentsEvent(mess: any) { }
+
+
+
+// setInterval(,15000)

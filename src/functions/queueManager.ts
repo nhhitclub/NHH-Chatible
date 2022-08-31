@@ -1,7 +1,7 @@
 
 export class QueueManager{
 
-    private queue: Array<string> = ['lmaookjlafdsf'];
+    private queue: Array<string> = [];
     private static instance: QueueManager;
 
     private constructor(){}
@@ -12,17 +12,15 @@ export class QueueManager{
         return QueueManager.instance
     }
 
-    addUserToQueue(userID: string): QueueManager{
+    addUserToQueue(userID: string): void{
         if(this.queue.indexOf(userID) !== -1) return
         this.queue.push(userID)
-        return this
     }
-    rmUserFromQueue(userID: string): QueueManager{
+    rmUserFromQueue(userID: string): void{
         var index = this.queue.indexOf(userID)
         if (index > -1) {
             this.queue.splice(index, 1)
         }
-        return this
     }
     shuffleUserInQueue(){
         if(this.queue.length === 0) return
@@ -33,8 +31,8 @@ export class QueueManager{
                 Math.floor(Math.random()*this.queue.length))
         }
     }
-    private reverse(array:Array<any>, a: number, b: number) {
-        const temp: any = array[b];
+    private reverse(array:Array<String>, a: number, b: number) {
+        const temp: String = array[b];
         array[b] = array[a];
         array[a] = temp;
 
@@ -45,7 +43,7 @@ export class QueueManager{
     }
     popUserToChat(){
         const numOfChat = Math.floor((this.queue.length -(this.queue.length % 2))/2)
-        const list: Array<any> = []
+        const list: Array<Array<String>> = []
         for(let index = 0; index < numOfChat; index++){
             const chat = []
 
@@ -61,7 +59,7 @@ export class QueueManager{
             list.push(chat)
         }
 
-        this.shuffleUserInQueue()
+        // this.shuffleUserInQueue() //why we need this one ?
         return list;
     }
     
