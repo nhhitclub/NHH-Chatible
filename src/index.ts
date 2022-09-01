@@ -1,5 +1,5 @@
 require("dotenv").config();
-import express from "express";
+import express, { response } from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
@@ -53,6 +53,10 @@ app.post("/webhook", (req: express.Request, res: express.Response) => {
     })
   });
 
+})
+
+app.post("/ping", (req: express.Request, res: express.Response) => {
+  res.send("OK")
 })
 
 
