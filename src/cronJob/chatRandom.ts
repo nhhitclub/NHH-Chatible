@@ -20,8 +20,8 @@ export const handleChatRandom = async () => {
         });
 
         await chatModel.save();
-        chatRoom.forEach((userChatID: string) => {
-            User.findOneAndUpdate({ userID: userChatID }, { currentChatID: chatID });
+        chatRoom.forEach(async (userChatID: string) => {
+            await User.findOneAndUpdate({ userID: userChatID }, { currentChatID: chatID });
 
             const template = new TemplateBuilder()
                 .setTitle("Đã tìm thấy người trò chuyện với bạn")
@@ -30,7 +30,7 @@ export const handleChatRandom = async () => {
 
 
             try {
-                facebookControllerInstance.sendMessageUsingTemplate(userChatID,template);
+                await facebookControllerInstance.sendMessageUsingTemplate(userChatID,template);
             }catch(e) {}
 
         });

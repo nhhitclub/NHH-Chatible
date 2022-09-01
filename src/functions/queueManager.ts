@@ -56,8 +56,7 @@ export class QueueManager {
       const user2 = this.randomUserInQueue();
       this.rmUserFromQueue(user2);
       chat.push(user2);
-
-      console.log(user1 + ":" + user2);
+      
       list.push(chat);
     }
 

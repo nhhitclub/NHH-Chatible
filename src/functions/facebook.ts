@@ -42,6 +42,12 @@ class FacebookController {
         );
         await this.sendMessage(userID, messageBuilder);
     }
+
+    public async sendLikeIcon(userID: string) {
+        const messageBuilder = new MessageBuilder().addLikeButton();
+
+        await this.sendMessage(userID, messageBuilder);
+    }
 }
 
 class TemplateBuilder {
@@ -76,11 +82,11 @@ class MessageBuilder {
         this.message.text = textValue;
         return this;
     }
-    private preRequireAttractmentMessage() {
+    private preRequireAttachmentMessage() {
         if(!this.message.attachment) this.message.attachment = {}
     }
     addUrlAttachment(type: string, url: string): MessageBuilder {
-        this.preRequireAttractmentMessage()
+        this.preRequireAttachmentMessage()
         this.message.attachment = {
             type,
             payload: {
@@ -90,8 +96,19 @@ class MessageBuilder {
         };
         return this;
     }
+    addLikeButton(): MessageBuilder {
+        if(this.message?.attachment.length > 0) throw new Error("LIKE BUTTON IS A ONLY ICON MESSAGE")
+        this.message.attachment = {
+            type: 'image',
+            payload: {
+                sticker_id: 369239263222822
+            }
+        }
+
+        return this
+    }
     addGenericTemplate(templateBuilder: TemplateBuilder): MessageBuilder {
-        this.preRequireAttractmentMessage()
+        this.preRequireAttachmentMessage()
         if (this.message.attachment && Object.keys(this.message.attachment).length === 0)
             this.message.attachment = {
                 type: "template",
