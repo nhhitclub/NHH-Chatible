@@ -7,7 +7,7 @@ import { InChatHandle } from "../message/InChatHandle"
 
 export const handleMessageEvent = async (mess: any) => {
   const userID = mess.sender.id
-  const userInDB = await User.find({ userID: userID })
+  const userInDB = await User.findOne({ userID: userID })
 
   if (userInDB.length === 0) {
     return await NewUserRequestHandle(userID)
@@ -17,7 +17,7 @@ export const handleMessageEvent = async (mess: any) => {
     return await MenuHandle(userID, userInDB)
   }
 
-  if (userInDB[0].currentChatID === "") {
+  if (userInDB?.currentChatID === "") {
     return await NoneChattingHandle(userID)
   } else {
     return await InChatHandle(mess, userInDB)
