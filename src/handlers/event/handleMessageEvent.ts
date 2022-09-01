@@ -8,8 +8,8 @@ import { InChatHandle } from "../message/InChatHandle"
 export const handleMessageEvent = async (mess: any) => {
   const userID = mess.sender.id
   const userInDB = await User.findOne({ userID: userID })
-
-  if (userInDB.length === 0) {
+  // console.log(userInDB)
+  if (userInDB == null||userInDB.length === 0) {
     return await NewUserRequestHandle(userID)
   }
 

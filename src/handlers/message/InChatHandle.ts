@@ -1,7 +1,7 @@
 import { FacebookController, MessageBuilder } from "../../functions/facebook"
 import { Chat } from "../../functions/mongooes";
-import Filter from 'bad-words';
-import { badWords } from "../../lib/vietnamese-badwords";
+
+// import { badWords } from "../../lib/vietnamese-badwords";
 
 
 
@@ -17,12 +17,12 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
     
     const messageInfo = mess.message
 
-    const filter = new Filter({ placeHolder: '*' })
-    filter.addWords(...badWords) // chưa loc đc tiếng việt :(
-    const censoredText = filter.clean(messageInfo.text)
+    // const filter = new Filter({ placeHolder: '*' })
+    // filter.addWords(...badWords) // chưa loc đc tiếng việt :(
+    // const censoredText = filter.clean(messageInfo.text)
 
     if ("text" in messageInfo) {
-        await fbInstance.sendTextOnlyMessage(anotherMember, censoredText)
+        await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
 
         await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text })
 

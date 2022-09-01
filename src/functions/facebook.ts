@@ -22,7 +22,6 @@ class FacebookController {
             recipient: { id: userID },
             message: messagePayload.getMessage(),
         };
-
         superagent
             .post(this.messageEndpoint)
             .query({ access_token: process.env.MESS_API })

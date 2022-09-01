@@ -42,7 +42,7 @@ app.post("/webhook", (req: express.Request, res: express.Response) => {
 
   if (req.body.object !== "page") return res.sendStatus(404)
   res.status(200).send("EVENT_RECEIVED")
-  //console.dir(req.body,{depth :null})
+  // console.dir(req.body,{depth :null})
   req.body.entry.forEach((entries: any) => {
     entries.messaging.forEach((mess: any) => {
       
