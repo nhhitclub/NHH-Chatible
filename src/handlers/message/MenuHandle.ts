@@ -11,7 +11,7 @@ export const MenuHandle: Function = async (userID: string, userInDB:any, callbac
         .setSubtitle("Menu này có các tính năng giúp bạn")
         .addPostbackButton("Gửi nút like", "SEND_LIKE")
         .addPostbackButton("Feedback", "START_FEEDBACK")
-        .addPostbackButton("Kết thúc đoạn chat", "END_CHAT")
+        .addPostbackButton("Kết thúc trò chuyện", "END_CHAT")
         
         await fbInstance.sendMessageUsingTemplate(userID, templateBuilder)
     }

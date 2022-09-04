@@ -3,8 +3,6 @@ import { Chat } from "../../functions/mongooes";
 
 // import { badWords } from "../../lib/vietnamese-badwords";
 
-
-
 export const InChatHandle: Function = async (mess: any, userInDB: any, callback: Function = () => { }) => {
     const fbInstance: FacebookController = FacebookController.getInstance()
     const chatInDB = await Chat.findOne({ chatID: userInDB.currentChatID })
