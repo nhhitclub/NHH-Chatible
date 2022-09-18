@@ -8,7 +8,7 @@ export default function () {
                 <br /><br />
                 <div className="card text-left">
                     <div className="card-body">
-                        <h4 className="card-title text-center">Điều khoản sử dụng</h4>
+                        <h4 className="card-title text-center display-5 text-uppercase mb-5">Điều khoản sử dụng</h4>
 
                         <div className="container">
                             <ul>
