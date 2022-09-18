@@ -1,13 +1,30 @@
 {
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*"
+  ],
   "compilerOptions": {
     "target": "es2021",
-    "lib": [ "es2021","dom","es2021.promise" ],
+    "lib": [
+      "es2021",
+      "dom",
+      "es2021.promise"
+    ],
     "outDir": "dist",
     "noImplicitAny": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "esModuleInterop": true,  
-  }
-  
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }
