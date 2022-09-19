@@ -8,8 +8,11 @@ export default function () {
                 <br /><br />
                 <div className="card text-left">
                     <div className="card-body">
-                        <h4 className="card-title text-center display-5 text-uppercase mb-5">Điều khoản sử dụng</h4>
-
+                        <div>
+                        <h4 className="card-title text-center display-5 text-uppercase">Điều khoản sử dụng</h4>
+                        <p className="text-center">Áp dụng cho toàn bộ hệ thống và các dịch vụ của NHH Chatible</p>
+                        <div className="mb-5"></div>
+                        </div>
                         <div className="container">
                             <ul>
                                 <li>Đây là điều khoản chung được lập ra để tạo ra một cộng động lành mạnh, phù hợp chung</li>
@@ -17,10 +20,11 @@ export default function () {
                                 <li>Bằng việc đồng ý điều khoản, bạn đã đồng ý với tất cả các điều luật dưới đây</li>
                             </ul>
                             <div className="col-12">
-                                <CollapseDropdown title="Điều khoản sử dụng">
+                                <CollapseDropdown title="Điều khoản sử dụng chung">
                                     <ol>
                                         <li className="mb-2">Chấp hành theo Hiến pháp, Pháp luật nhà nước CHXHCNVN</li>
                                         <li className="mb-2">Yêu tổ quốc, yêu đồng bào</li>
+                                        <li className="mb-2">Chịu trách nhiệm hoàn toàn với những lời nói của mình</li>
                                         <li className="mb-2">Không tìm cách can thiệp hoặc truy cập sâu vào hệ thống</li>
                                         <li className="mb-2">Quyền quyết định của các quản trị viên là quyền quyết định cuối cùng</li>
                                     </ol>
@@ -36,10 +40,15 @@ export default function () {
                                 </CollapseDropdown>
                             </div>
 
+                            <div className="col-12">
+                                <CollapseDropdown title="Quyền riêng tư">
+                                    <p>Chúng tôi sẽ lưu lại thông tin về các đoạn chat, thông tin cá nhân về tất cả những cá nhân, thực thể tham gia vào đoạn Chat để phục vụ cho nhiều mục đích, lý do khác nhau</p>
+                                </CollapseDropdown>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <small>Được viết bởi admin</small>
+                <small>Được viết bởi admin. Cập nhật lần cuối ngày 19/9/2022</small>
             </div>
         </>
     )
