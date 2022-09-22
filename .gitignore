@@ -5,3 +5,4 @@ test.js
 dist
 .next
 docker
+docker-compose.yml
