@@ -1,7 +1,9 @@
 const gulp = require("gulp");
 const ts = require("gulp-typescript");
-const tsProject = ts.createProject("tsconfig.json");
+var tsProject = ts.createProject('tsconfig.json',{ noImplicitAny: true });
+const {compilerOptions} = require("./tsconfig.json")
 
 gulp.task("default", function () {
-  return tsProject.src().pipe(tsProject()).js.pipe(gulp.dest("dist"));
+  var tsResult = gulp.src("src/**/*.ts").pipe(tsProject());
+  return tsResult.js.pipe(gulp.dest(compilerOptions.outDir)); 
 });

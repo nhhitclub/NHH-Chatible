@@ -28,3 +28,17 @@ console.log(cache.get("1000"))
 var endTime = performance.now()
 
 console.log(`Call to doSomething took ${endTime - startTime} milliseconds`)
+
+
+
+// const gulp = require("gulp");
+// const ts = require("gulp-typescript");
+// const tsProject = ts.createProject("tsconfig.json");
+// var del = require('del');
+// const {series } = gulp
+
+
+// let tsJob = tsProject.src().pipe(tsProject()).js.pipe(gulp.dest("dist"));
+// gulp.task("default", function () {
+//   return series(del["dist"],tsJob) 
+// });

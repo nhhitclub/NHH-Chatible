@@ -42,7 +42,7 @@ export default function () {
 
                             <div className="col-12">
                                 <CollapseDropdown title="Quyền riêng tư">
-                                    <p>Chúng tôi sẽ lưu lại thông tin về các đoạn chat, thông tin cá nhân về tất cả những cá nhân, thực thể tham gia vào đoạn Chat để phục vụ cho nhiều mục đích, lý do khác nhau</p>
+                                    <p>Chúng tôi sẽ lưu lại thông tin về các đoạn chat, thông tin cá nhân về tất cả những cá nhân, thực thể tham gia vào đoạn chat để phục vụ cho nhiều mục đích, lý do khác nhau</p>
                                 </CollapseDropdown>
                             </div>
                         </div>

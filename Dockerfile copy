@@ -1,0 +1,25 @@
+FROM node:lts AS packageInstaller
+
+ENV NODE_ENV=production
+
+RUN npm install --global gulp next 
+
+WORKDIR /app
+
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+RUN gulp
+
+RUN npx next build
+
+# RUN chown -R node /usr/src/app
+
+USER node
+
+CMD ["npm", "start"]
