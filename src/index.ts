@@ -20,10 +20,10 @@ webApp.prepare()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 const webAppRequestHanle = webApp.getRequestHandler()
-// mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions).then(() => console.log('DB Connected!'))
-// db.on('error', (err: any) => {
-//   console.log('DB connection error:', err.message)
-// })
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions).then(() => console.log('DB Connected!'))
+db.on('error', (err: any) => {
+  console.log('DB connection error:', err.message)
+})
 
 
 app.get("/webhook", (req: express.Request, res: express.Response) => {
