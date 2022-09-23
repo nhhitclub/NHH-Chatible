@@ -1,9 +1,19 @@
-
 FROM node:lts
-WORKDIR /app
+
+WORKDIR /node
+
 COPY package.json package-lock.json ./
+
 RUN npm install
+
+WORKDIR /node/app
+
 COPY . .
+
 RUN npx gulp
+
 RUN npx next build
-CMD ["node", "./dist/index.js"]
+
+EXPOSE 3000
+
+CMD ["node","./dist/index.js"]
