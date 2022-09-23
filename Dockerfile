@@ -2,7 +2,7 @@
 FROM node:lts
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 RUN npx gulp
 RUN npx next build
