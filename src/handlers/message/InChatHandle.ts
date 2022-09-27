@@ -1,5 +1,5 @@
 import { FacebookController, MessageBuilder } from "../../functions/facebook"
-import { Chat } from "../../functions/mongooes";
+import { Chat } from "../../functions/database";
 
 // import { badWords } from "../../lib/vietnamese-badwords";
 
