@@ -1,5 +1,5 @@
 import { FacebookController, TemplateBuilder } from "../../functions/facebook";
-import { User, Chat } from "../../functions/mongooes";
+import { User, Chat } from "../../functions/database";
 
 export const END_CHAT = async (mess: any) => {
     const userID = mess.sender.id;

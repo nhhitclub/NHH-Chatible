@@ -1,5 +1,5 @@
 import { FacebookController, TemplateBuilder } from "../functions/facebook";
-import { User, Chat } from "../functions/mongooes";
+import { User, Chat } from "../functions/database";
 import { QueueManager } from "../functions/queueManager";
 import { v4 as uid_v4 } from "uuid";
 

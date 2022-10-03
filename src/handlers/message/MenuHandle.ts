@@ -1,5 +1,5 @@
 import { TemplateBuilder, FacebookController } from "../../functions/facebook"
-import { User } from "../../functions/mongooes"
+import { User } from "../../functions/database"
 
 export const MenuHandle: Function = async (userID: string, userInDB:any, callback: Function = () => {}) => {
 

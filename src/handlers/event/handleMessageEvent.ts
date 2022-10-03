@@ -1,4 +1,4 @@
-import { User, Chat } from "../../functions/mongooes"
+import { User, Chat } from "../../functions/database"
 
 import { NewUserRequestHandle } from "../message/NewUserRequestHandle"
 import { NoneChattingHandle } from "../message/NoneChattingHandle"

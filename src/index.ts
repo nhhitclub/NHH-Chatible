@@ -5,6 +5,9 @@ import mongoose, { ConnectOptions } from 'mongoose'
 import next, { NextApiHandler } from "next"
 import { parse } from "url"
 
+import {promisify} from "util"
+
+
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 import { handleChatRandom } from "./cronJob/chatRandom"
@@ -16,16 +19,16 @@ const app:express.Express = express()
 const db = mongoose.connection
 
 
+
 webApp.prepare()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 const webAppRequestHanle = webApp.getRequestHandler()
-// mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions).then(() => console.log('DB Connected!'))
-// db.on('error', (err: any) => {
-//   console.log('DB connection error:', err.message)
-// })
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions).then(() => console.log('DB Connected!'))
+db.on('error', (err: any) => {
+  console.log('DB connection error:', err.message)
+})
 
-console.log(process.env)
 
 
 app.get("/webhook", (req: express.Request, res: express.Response) => {
@@ -84,6 +87,25 @@ app.listen(process.env.WEBPORT)
 async function handleReadEvent(mess: any) { }
 async function handleAttachmentsEvent(mess: any) { }
 
+
+// //save old querry
+// const exec = mongoose.Query.prototype.exec
+// //overwrite the exec fucntion
+// mongoose.Query.prototype.exec = async function () {
+//   const key = JSON.stringify({
+//       ...this.getQuery(),
+//       collection: this.mongooseCollection.name,
+//       op: this.op,
+//       options: this.options
+//     })
+
+//     const cacheValue = await promiseRedisClient.get(key)
+//     if(cacheValue){
+      
+//     } return JSON.parse(cacheValue)
+
+
+// }
 
 
 setInterval(handleChatRandom,15000)

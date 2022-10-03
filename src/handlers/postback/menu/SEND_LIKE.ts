@@ -1,5 +1,5 @@
 import { FacebookController } from "../../../functions/facebook"
-import { Chat, User } from "../../../functions/mongooes"
+import { Chat, User } from "../../../functions/database"
 
 export const SEND_LIKE = async (mess: any) => {
 
