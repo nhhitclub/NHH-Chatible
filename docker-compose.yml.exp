@@ -16,6 +16,8 @@ services:
   mongo:
     image: mongo
     restart: always
+    ports:
+      - 27017:27017
     environment:
       MONGO_INITDB_ROOT_USERNAME: <DB_USERNAME_HERE>
       MONGO_INITDB_ROOT_PASSWORD: <DB_PASSWORD_HERE>
