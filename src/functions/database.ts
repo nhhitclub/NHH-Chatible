@@ -21,15 +21,12 @@ class cacheInterface {
     private cache:unknown
     constructor(type:string,config?:any) {
 
-        if(type ==  "redis"){
-            this.cache = redis.createClient(config)
-        }
-        else if(type == "internal"){
-            this.cache = new NodeCache({stdTTL:2*60})
-        }
-        else{
-            console.error("Invaild type of cache type");
-        }
+        if(type ==  "redis")return this.cache = redis.createClient(config)
+        
+        if(type == "internal") return this.cache = new NodeCache({stdTTL:2*60})
+        
+        console.error("Invaild type of cache type");
+        
     }
 
     // get(data:string):any{
