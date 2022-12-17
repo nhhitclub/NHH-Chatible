@@ -3,9 +3,9 @@ const dev:boolean = process.env.NODE_ENV !== 'production'
 import express, { response } from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
 import next, { NextApiHandler } from "next"
-import { parse } from "url"
-
+import { parse  } from "url"
 import {promisify} from "util"
+import { DiscordClient } from "./functions/discord";
 
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
@@ -17,6 +17,7 @@ import { NextServer, RequestHandler } from "next/dist/server/next";
 const webApp:NextServer = next({dev})
 const app:express.Express = express()
 const db = mongoose.connection
+const discord:DiscordClient = DiscordClient.getInstance(process.env.DISCORD_TOKEN) 
 
 
 
