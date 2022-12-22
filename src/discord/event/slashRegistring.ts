@@ -15,9 +15,7 @@ module.exports = {
             const data:any = await rest.put(
                 Discord.Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
                 { 
-                    body: DiscordClient.commands
-                        .map(({filter}:any)  => filter)
-                        .data.toJSON() 
+                    body: DiscordClient.commands.map(data=> data.data)
                 },
             );
             console.log(`Successfully reloaded ${data.length} application (/) commands.`);
@@ -27,3 +25,5 @@ module.exports = {
         
     }
 }
+
+
