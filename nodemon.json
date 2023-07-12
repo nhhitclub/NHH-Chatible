@@ -2,6 +2,7 @@
   "watch": [
     "src"
   ],
+  "ignore": [".next"] ,
   "ext": "ts,json",
   "exec": "npx ts-node ./src/index.ts"
 }

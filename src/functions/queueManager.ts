@@ -1,5 +1,5 @@
 export class QueueManager {
-  private queue: Array<string> = [];
+  queue: Array<string> = [];
   private static instance: QueueManager;
 
   private constructor() {}
