@@ -3,7 +3,7 @@
     "src/**/*"
   ],
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2021",
     "lib": [
       "es2021",
       "dom",
@@ -19,12 +19,11 @@
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "noEmit": false,
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["dist", ".next", "out", "next.config.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

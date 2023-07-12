@@ -20,7 +20,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/",
-    "build": "npx gulp && npx next build",
+    "build": "npx tsc && npx next build",
     "dev": "npx nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -47,9 +47,6 @@
     "@types/uuid": "^8.3.4",
     "autoprefixer": "^10.4.8",
     "del": "^7.0.0",
-    "gulp": "^4.0.2",
-    "gulp-cli": "^2.3.0",
-    "gulp-typescript": "5.0.1",
     "typescript": "^4.8.3"
   }
 }
