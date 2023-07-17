@@ -9,32 +9,32 @@ export const handlePostbackEvent = async (mess: any) => {
     
     switch(mess.postback.payload) {
         case "CHAT_REQUEST": {
-            CHAT_REQUEST(mess)
+            await CHAT_REQUEST(mess)
             break
         }
             
         case "EXISTED_USER_START":{
-            EXISTED_USER_START(mess)
+            await EXISTED_USER_START(mess)
             break
         } 
 
         case "REMOVE_FROM_QUEUE":{
-            REMOVE_FROM_QUEUE(mess)
+            await REMOVE_FROM_QUEUE(mess)
             break
         } 
 
         case "START_FEEDBACK": {
-            START_FEEDBACK(mess)
+            await START_FEEDBACK(mess)
             break
         }
 
         case "SEND_LIKE": {
-            SEND_LIKE(mess)
+            await SEND_LIKE(mess)
             break
         }
 
         case "END_CHAT":{
-            END_CHAT(mess)
+            await END_CHAT(mess)
             break
         }
             
