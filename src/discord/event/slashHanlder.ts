@@ -2,12 +2,11 @@ import Discord from "discord.js"
 import { DiscordClient } from "../../functions/discord"
 
 module.exports = {
-    name:Discord.Events.InteractionCreate,
-    once:false,
+    name: Discord.Events.InteractionCreate,
+    once: false,
     execute: (interaction:any) => {
         if (!interaction.isChatInputCommand()) return;
-        let client = DiscordClient.getInstance()
-        let command = DiscordClient.commands.find(filter => filter.data.name);
+        const command = DiscordClient.commands.find(filter => filter.data.name);
 
         if (!command) {
             console.error(`No command matching ${interaction.commandName} was found.`);

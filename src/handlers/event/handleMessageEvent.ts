@@ -1,4 +1,4 @@
-import { User, Chat } from "../../functions/database"
+import { User } from "../../functions/database"
 
 import { NewUserRequestHandle } from "../message/NewUserRequestHandle"
 import { NoneChattingHandle } from "../message/NoneChattingHandle"
@@ -9,11 +9,11 @@ export const handleMessageEvent = async (mess: any) => {
   const userID = mess.sender.id
   const userInDB = await User.findOne({ userID: userID })
   
-  if (!userInDB) { //find one nên ko cần length nữa á a =)
+  if (!userInDB) {
     return await NewUserRequestHandle(userID)
   }
 
-  if (mess.message.attachments?.[0].payload.sticker_id === 369239263222822) { //handle like button
+  if (mess.message.attachments?.[0].payload.sticker_id === 369239263222822) {
     return await MenuHandle(userID, userInDB)
   }
 

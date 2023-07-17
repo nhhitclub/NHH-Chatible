@@ -1,5 +1,7 @@
 require("dotenv").config()
-import Discord, { ApplicationCommandOptionWithChoicesAndAutocompleteMixin } from "discord.js"
+//import Discord, { ApplicationCommandOptionWithChoicesAndAutocompleteMixin } from "discord.js"
+import Discord from "discord.js"
+
 import fs from "node:fs"
 import path from "node:path"
 

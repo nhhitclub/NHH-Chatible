@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose"
-import * as redis from "redis"
-import NodeCache from "node-cache"
+// import * as redis from "redis"
+// import NodeCache from "node-cache"
 
 
 // const promiseRedisClient = {

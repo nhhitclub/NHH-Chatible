@@ -1,31 +1,33 @@
 require("dotenv").config();
 const dev:boolean = process.env.NODE_ENV !== 'production'
-import express, { response } from "express";
+import express from "express";
 import mongoose, { ConnectOptions } from 'mongoose'
-import next, { NextApiHandler } from "next"
+import next from "next"
 import { parse  } from "url"
-import {promisify} from "util"
-import { DiscordClient } from "./functions/discord";
+import { DiscordClient } from "./functions/discord"
 
 
 import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 import { handleChatRandom } from "./cronJob/chatRandom"
-import { NextServer, RequestHandler } from "next/dist/server/next";
+import { NextServer } from "next/dist/server/next"
 
 
 const webApp:NextServer = next({dev})
 const app:express.Express = express()
 const db = mongoose.connection
-const discord:DiscordClient = DiscordClient.getInstance(process.env.DISCORD_TOKEN) 
 
 
+DiscordClient.getInstance(process.env.DISCORD_TOKEN) 
 
 webApp.prepare()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
 const webAppRequestHanle = webApp.getRequestHandler()
-mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions).then(() => console.log('DB Connected!'))
+mongoose.set('strictQuery', true);
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions)
+
 db.on('error', (err: any) => {
   console.log('DB connection error:', err.message)
 })
@@ -75,10 +77,8 @@ app.get("/ping", (req: express.Request, res: express.Response) => {
 
 app.all('*', (req, res) => {
   const parsedUrl = parse(req.url, true)
-  const { pathname, query } = parsedUrl
-  return webAppRequestHanle(req, res,parsedUrl)
+  return webAppRequestHanle(req, res, parsedUrl)
 })
-
 
 
 app.listen(process.env.WEBPORT)
@@ -109,4 +109,4 @@ async function handleAttachmentsEvent(mess: any) { }
 // }
 
 
-setInterval(handleChatRandom,15000)
+setInterval(handleChatRandom, 15000)
