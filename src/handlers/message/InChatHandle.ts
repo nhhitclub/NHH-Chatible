@@ -23,6 +23,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
 
         await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text })
+        await chatInDB.save();
 
     }
     if ("attachments" in messageInfo) {
