@@ -6,7 +6,7 @@ module.exports = {
     once: false,
     execute: (interaction:any) => {
         if (!interaction.isChatInputCommand()) return;
-        const command = DiscordClient.commands.find(filter => filter.data.name);
+        const command = DiscordClient.commands.find(filter => filter.data.name === interaction.commandName);
 
         if (!command) {
             console.error(`No command matching ${interaction.commandName} was found.`);

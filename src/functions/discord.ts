@@ -39,21 +39,19 @@ export class DiscordClient {
             let commandsPath:string = path.join(__dirname, '../discord/commands');
             let eventPath:string = path.join(__dirname, '../discord/event');
             // console.log(fs.readdirSync(eventPath))
-            
-            //load discord commands
-            fs.readdirSync(commandsPath).filter(fileFilter => fileFilter.endsWith(".ts")).forEach(async file =>{
-                let command  = await import(path.join(commandsPath,file))
+
+            fs.readdirSync(commandsPath).filter(fileFilter => fileFilter.endsWith(".ts"))
+            .forEach(file =>{
+                let command = require(path.join(commandsPath,file))
                 if("data" in command && "execute" in command) DiscordClient.commands.push(command);
-            })
+            });
 
             //load all discord event
             fs.readdirSync(eventPath).filter(fileFilter => fileFilter.endsWith(".ts")).forEach(async file =>{
                 try {
                     let eventFiles  = await import(path.join(eventPath,file))
-                    console.log(eventFiles.name)
                     if (eventFiles.once) {
                         DiscordClient.client.once(eventFiles.name, (...args) => {
-                            // console.log(1)
                             eventFiles.execute(...args)
                         });
                     } else {
