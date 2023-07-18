@@ -8,7 +8,6 @@ module.exports = {
     execute: async () => {
 
         let rest:Discord.REST = new Discord.REST({version:"10"}).setToken(process.env.DISCORD_TOKEN)
-        //console.log(DiscordClient.commands)
         try {
             //console.log(`Started refreshing ${DiscordClient.commands.length} application (/) commands.`);
             const data:any = await rest.put(
