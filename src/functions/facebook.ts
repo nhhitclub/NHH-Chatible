@@ -1,9 +1,9 @@
 require("dotenv").config();
 const superagent: any = require("superagent");
-const ENDPOINT: string = "https://graph.facebook.com/v14.0";
+const ENDPOINT: string = "https://graph.facebook.com";
 
 class FacebookController {
-    private messageEndpoint: string = ENDPOINT + "/me/messages";
+    private messageEndpoint: string = ENDPOINT + "/v14.0/me/messages";
     private static instance: FacebookController;
 
     private constructor() {
@@ -15,6 +15,16 @@ class FacebookController {
         }
 
         return FacebookController.instance;
+    }
+
+    public async getUserByID(userID: string) {
+        let request = await superagent
+                            .get(ENDPOINT+"/"+userID)
+                            .query({
+                                fields:"name,profile_pic",
+                                access_token: process.env.MESS_API
+                        })
+        console.log(request.body)
     }
 
     public async sendMessage(userID: string, messagePayload: MessageBuilder) {

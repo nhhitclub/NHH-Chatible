@@ -54,7 +54,9 @@ const userSchema: Schema = new Schema({
     isBlocked: Boolean,
     blockReason: String,
     blockExpiry: String,
-    currentChatID: String
+    currentChatID: String,
+    displayName:String,
+    avatarURL:String
 })
 
 const chatSchema: Schema = new Schema({
