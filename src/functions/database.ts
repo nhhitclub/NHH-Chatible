@@ -64,7 +64,8 @@ const chatSchema: Schema = new Schema({
         sender: String,
         text: String,
         attachmentURL: String,
-        emoji_ID:String
+        emoji_ID: String,
+        sent_time: { type : Date }
     }]
 })
 
