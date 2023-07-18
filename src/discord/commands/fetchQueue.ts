@@ -19,7 +19,7 @@ module.exports = {
             
             outstr = outstr+`${count}. **${user}**-`
         }
-        console.log(queue)
+        
         const embed:EmbedBuilder = new EmbedBuilder()
         .setColor(0x0099FF)
         .addFields({name:`Hiện trong hàng chờ có: ${queue.length} người dùng`,value:queue.length == 0 ? "Danh sách trống": queue.join("\n")})
