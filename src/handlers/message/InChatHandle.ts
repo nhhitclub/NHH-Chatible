@@ -15,31 +15,35 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
     
     const messageInfo = mess.message
 
-    // const filter = new Filter({ placeHolder: '*' })
-    // filter.addWords(...badWords) // chưa loc đc tiếng việt :(
-    // const censoredText = filter.clean(messageInfo.text)
 
-    if ("text" in messageInfo) {
+    if (messageInfo.text) {
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
 
-        await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text })
-        await chatInDB.save();
-
+        await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
+        
     }
-    if ("attachments" in messageInfo) {
+    if (messageInfo.attachments) {
         messageInfo.attachments.forEach(async (attachment: any) => {
             const messageBuilder = new MessageBuilder().addUrlAttachment(attachment.type ,attachment.payload.url)
-
+            
             
             try{ 
                 await fbInstance.sendMessage(anotherMember, messageBuilder)
-            }catch(e) { console.log('error while sending attachment')}
-            await chatInDB.chatMess.push({ sender: userID, attachmentUrl: attachment.payload.url})
+                
+            }catch(e) { 
+                console.log('error while sending attachment')
+            }
+            
+            await chatInDB.chatMess.push({ 
+                sender: userID, 
+                attachmentURL: attachment.payload.url, 
+                sent_time: mess.timestamp
+            })
 
         });
     }
     //handle message types
-
-
+    
+    chatInDB.save();
     callback();
 }
