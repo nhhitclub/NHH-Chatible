@@ -19,7 +19,7 @@ export default async function handlePostbackEvent(mess: any) {
 
     await userRecord.save()
 
-    await facebookControllerInstance.sendTextOnlyMessage(userID, "Tài khoản của bạn đã được xác thực thành công, chào mừng bạn đã đén với NHH Chatible")
+    await facebookControllerInstance.sendTextOnlyMessage(userID, "Tài khoản của bạn đã được xác thực thành công, chào mừng bạn đã đến với NHH Chatible")
     await facebookControllerInstance.sendTextOnlyMessage(userID, "Để tiếp tục. Hãy nhắn một nội dung bất kì")
 
 }
