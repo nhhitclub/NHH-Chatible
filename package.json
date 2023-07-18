@@ -21,7 +21,7 @@
   "scripts": {
     "start": "node dist/",
     "build": "npx tsc && npx next build",
-    "dev": "nodemon",
+    "dev": "npx nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
