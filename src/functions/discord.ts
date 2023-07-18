@@ -1,6 +1,6 @@
 require("dotenv").config()
 //import Discord, { ApplicationCommandOptionWithChoicesAndAutocompleteMixin } from "discord.js"
-import Discord from "discord.js"
+import Discord, { ForumChannel, GuildForumThreadCreateOptions } from "discord.js"
 
 import fs from "node:fs"
 import path from "node:path"
@@ -71,13 +71,27 @@ export class DiscordClient {
         } 
 
         return DiscordClient.instance
-    }    
-    
-
-    private getChannel(){
-
     }
-    // createThread()
+
+    public static async getChannelByID(id: string){
+        return await DiscordClient.client.channels.fetch(id);
+    }
+
+    public static async getThread(channelID: string, threadID: string){
+        return (await DiscordClient.getChannelByID(channelID) as ForumChannel).threads.fetch(threadID);
+    }
+    
+    
+    public static async createThread(channelID : string, name: string, u1:string, u2:string){
+        return (await DiscordClient.getChannelByID(channelID) as ForumChannel)
+            .threads.create({
+                name,
+                reason: 'Log chat for chat ID ' + name,
+                message: {
+                    content: '---BEGINNING OF LOG----\n USER 1: ' + u1 + ' and USER 2: ' + u2
+                }
+            } as GuildForumThreadCreateOptions);
+    }
 
     
 }

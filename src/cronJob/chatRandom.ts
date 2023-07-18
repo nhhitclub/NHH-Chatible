@@ -2,6 +2,7 @@ import { FacebookController, TemplateBuilder } from "../functions/facebook";
 import { User, Chat } from "../functions/database";
 import { QueueManager } from "../functions/queueManager";
 import { v4 as uid_v4 } from "uuid";
+import { DiscordClient } from "../functions/discord";
 
 export const handleChatRandom = async () => {
     const facebookControllerInstance: FacebookController = FacebookController.getInstance();
@@ -13,8 +14,10 @@ export const handleChatRandom = async () => {
 
     chatRoomList.forEach(async (chatRoom) => {
         const chatID = uid_v4();
+        const newThread = await DiscordClient.createThread('1041402162166644876', chatID, chatRoom[0], chatRoom[1]);
         const chatModel = new Chat({
             chatID,
+            threadID: newThread.id,
             members: chatRoom,
             chatMess: [],
         });

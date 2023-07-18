@@ -59,6 +59,7 @@ const userSchema: Schema = new Schema({
 
 const chatSchema: Schema = new Schema({
     chatID: String,
+    threadID: String,
     members: [String],
     chatMess: [{
         sender: String,

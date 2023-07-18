@@ -1,7 +1,7 @@
 import { FacebookController, MessageBuilder } from "../../functions/facebook"
 import { Chat } from "../../functions/database";
+import { DiscordClient } from "../../functions/discord";
 
-// import { badWords } from "../../lib/vietnamese-badwords";
 
 export const InChatHandle: Function = async (mess: any, userInDB: any, callback: Function = () => { }) => {
     const fbInstance: FacebookController = FacebookController.getInstance()
@@ -18,8 +18,10 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
 
     if (messageInfo.text) {
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
-
         await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
+        await (await DiscordClient.getThread('1041402162166644876', chatInDB.threadID)).send(
+            userID + ": " + messageInfo.text
+        )
         
     }
     if (messageInfo.attachments) {
@@ -39,6 +41,9 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
                 attachmentURL: attachment.payload.url, 
                 sent_time: mess.timestamp
             })
+            await (await DiscordClient.getThread('1041402162166644876', chatInDB.threadID)).send(
+                userID + ": " + attachment.payload.url
+            )
 
         });
     }

@@ -1,5 +1,6 @@
 import { FacebookController, TemplateBuilder } from "../../functions/facebook";
 import { User, Chat } from "../../functions/database";
+import { DiscordClient } from "../../functions/discord";
 
 export const END_CHAT = async (mess: any) => {
     const userID = mess.sender.id;
@@ -8,6 +9,7 @@ export const END_CHAT = async (mess: any) => {
     
     const senderInfo = await User.findOne({ userID })
     const chatRoom = await Chat.findOne({ chatID: senderInfo.currentChatID })
+    await (await DiscordClient.getThread('1041402162166644876', chatRoom.threadID)).send("----END OF LOG---")
 
     chatRoom.members.forEach(async (memberID: string) => {
         await User.findOneAndUpdate({ userID: memberID }, { currentChatID: "" })
