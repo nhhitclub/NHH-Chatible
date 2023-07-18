@@ -9,7 +9,10 @@ export const END_CHAT = async (mess: any) => {
     
     const senderInfo = await User.findOne({ userID })
     const chatRoom = await Chat.findOne({ chatID: senderInfo.currentChatID })
-    await (await DiscordClient.getThread('1041402162166644876', chatRoom.threadID)).send("----END OF LOG---")
+    
+    const currentThread = await DiscordClient.getThread('1041402162166644876', chatRoom.threadID);
+    await currentThread.send("----END OF LOG---")
+    await currentThread.setArchived(true);
 
     chatRoom.members.forEach(async (memberID: string) => {
         await User.findOneAndUpdate({ userID: memberID }, { currentChatID: "" })

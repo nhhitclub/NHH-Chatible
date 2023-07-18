@@ -6,6 +6,7 @@ import { DiscordClient } from "../../functions/discord";
 export const InChatHandle: Function = async (mess: any, userInDB: any, callback: Function = () => { }) => {
     const fbInstance: FacebookController = FacebookController.getInstance()
     const chatInDB = await Chat.findOne({ chatID: userInDB.currentChatID })
+    const currentThread = await DiscordClient.getThread('1041402162166644876', chatInDB.threadID);
 
     const userID = mess.sender.id
 
@@ -19,7 +20,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
     if (messageInfo.text) {
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
         await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
-        await (await DiscordClient.getThread('1041402162166644876', chatInDB.threadID)).send(
+        await currentThread.send(
             userID + ": " + messageInfo.text
         )
         
@@ -41,7 +42,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
                 attachmentURL: attachment.payload.url, 
                 sent_time: mess.timestamp
             })
-            await (await DiscordClient.getThread('1041402162166644876', chatInDB.threadID)).send(
+            await currentThread.send(
                 userID + ": " + attachment.payload.url
             )
 
