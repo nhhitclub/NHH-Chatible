@@ -1,12 +1,11 @@
 import { FacebookController, MessageBuilder } from "../../functions/facebook"
 import { Chat } from "../../functions/database";
-import { DiscordClient } from "../../functions/discord";
+import { LogChat } from "../postback/procedure/chatLogProcedure";
 
 
 export const InChatHandle: Function = async (mess: any, userInDB: any, callback: Function = () => { }) => {
     const fbInstance: FacebookController = FacebookController.getInstance()
     const chatInDB = await Chat.findOne({ chatID: userInDB.currentChatID })
-    const currentThread = await DiscordClient.getThread('1041402162166644876', chatInDB.threadID);
 
     const userID = mess.sender.id
 
@@ -20,9 +19,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
     if (messageInfo.text) {
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
         await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
-        await currentThread.send(
-            userID + ": " + messageInfo.text
-        )
+        await LogChat(chatInDB.threadID, userID, messageInfo.text)
         
     }
     if (messageInfo.attachments) {
@@ -42,9 +39,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
                 attachmentURL: attachment.payload.url, 
                 sent_time: mess.timestamp
             })
-            await currentThread.send(
-                userID + ": " + attachment.payload.url
-            )
+            await LogChat(chatInDB.threadID, userID, attachment.payload.url)
 
         });
     }
