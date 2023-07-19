@@ -3,7 +3,7 @@ export class QueueManager {
   private static instance: QueueManager;
 
   private constructor() {}
-
+  
   public static getInstance(): QueueManager {
     if (!QueueManager.instance) QueueManager.instance = new QueueManager();
 

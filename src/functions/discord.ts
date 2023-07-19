@@ -1,9 +1,10 @@
 require("dotenv").config()
 //import Discord, { ApplicationCommandOptionWithChoicesAndAutocompleteMixin } from "discord.js"
-import Discord, { ForumChannel, GuildForumThreadCreateOptions } from "discord.js"
+import Discord, { ForumChannel, GuildForumThreadCreateOptions, WebhookClient } from "discord.js"
 
 import fs from "node:fs"
 import path from "node:path"
+import { ChatType, MessageType, UserType } from "./interface"
 
 
 
@@ -20,6 +21,7 @@ export class DiscordClient {
     private static instance:DiscordClient
     private static client:Discord.Client = new Discord.Client({ intents: [Discord.GatewayIntentBits.Guilds] });
     static commands:Array<CommandsInterface> = []
+    private static chatWebhookClient = new WebhookClient({ url: process.env.CHAT_WEBHOOK });
     
     private constructor(){}
     
@@ -80,15 +82,23 @@ export class DiscordClient {
     }
     
     
-    public static async createThread(channelID : string, name: string, u1:string, u2:string){
+    public static async createThread(channelID : string, name: string,startContent:string){
         return (await DiscordClient.getChannelByID(channelID) as ForumChannel)
             .threads.create({
                 name,
-                reason: 'Log chat for chat ID ' + name,
                 message: {
-                    content: '---BEGINNING OF LOG----\n USER 1: ' + u1 + ' and USER 2: ' + u2
+                    content: startContent
                 }
             } as GuildForumThreadCreateOptions);
+    }
+
+    public static async sendTextChatToChatLog(user:UserType,chat:ChatType,message:string){
+        this.chatWebhookClient.send({ 
+            username:`${user.displayName} - ${user.userID}`,
+            avatarURL:(user.avatarURL as string),
+            content:message,
+            threadId:(chat.threadID as string)
+        })
     }
 
     

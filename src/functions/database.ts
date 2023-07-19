@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose"
+import { UserType } from "./interface"
 // import * as redis from "redis"
 // import NodeCache from "node-cache"
 
@@ -49,11 +50,9 @@ import { Schema, model } from "mongoose"
 // }
 
 
-const userSchema: Schema = new Schema({
+const userSchema: Schema = new Schema<UserType>({
     userID: String,
-    isBlocked: Boolean,
-    blockReason: String,
-    blockExpiry: String,
+    role: String,
     currentChatID: String,
     displayName:String,
     avatarURL:String

@@ -4,7 +4,7 @@ import { QueueManager } from "../../functions/queueManager";
 export default async function handlePostbackEvent(mess: any) {
     const userID = mess.sender.id;
     const fbInstance = FacebookController.getInstance();
-
+    
     QueueManager.getInstance().addUserToQueue(userID);
 
     const templateBuilder: TemplateBuilder = new TemplateBuilder()

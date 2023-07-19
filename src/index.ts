@@ -13,18 +13,28 @@ import { handleChatRandom } from "./cronJob/chatRandom"
 import { NextServer } from "next/dist/server/next"
 
 
-const webApp:NextServer = next({dev})
+
 const app:express.Express = express()
 const db = mongoose.connection
+
+if(process.env.NEXT_DISABLE != "true"){
+  const webApp:NextServer = next({dev})
+  webApp.prepare()
+  const webAppRequestHanle = webApp.getRequestHandler()
+  app.all('*', (req, res) => {
+    const parsedUrl = parse(req.url, true)
+    return webAppRequestHanle(req, res, parsedUrl)
+  })
+}
 
 
 DiscordClient.getInstance(process.env.DISCORD_TOKEN) 
 
-webApp.prepare()
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-const webAppRequestHanle = webApp.getRequestHandler()
+
 mongoose.set('strictQuery', true);
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOptions)
 
@@ -69,20 +79,12 @@ app.post("/webhook", (req: express.Request, res: express.Response) => {
 })
 
 
-
-
 app.get("/ping", (req: express.Request, res: express.Response) => {
   res.send("OK")
 })
 
-app.all('*', (req, res) => {
-  const parsedUrl = parse(req.url, true)
-  return webAppRequestHanle(req, res, parsedUrl)
-})
-
 
 app.listen(process.env.WEBPORT)
-
 
 
 async function handleReadEvent(mess: any) { }

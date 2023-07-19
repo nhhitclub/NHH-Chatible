@@ -10,11 +10,13 @@ export default async function handlePostbackEvent(mess: any) {
     if (userInDB.length !== 0) 
         return await facebookControllerInstance.sendTextOnlyMessage(userID, "Tài khoản của bạn đã được xác thực từ trước đó, bạn không cần phải xác thực lại")
 
+    let otherInfo = await facebookControllerInstance.getUserByID(userID)
     const userRecord = new User({
-        userID, isBlocked: false,
-        blockReason: null,
-        blockExpiry: null,
-        currentChatID: ""
+        userID, 
+        role: "user",
+        currentChatID: "",
+        displayName:otherInfo.name,
+        avatarURL:otherInfo.profile_pic
     })
 
     await userRecord.save()

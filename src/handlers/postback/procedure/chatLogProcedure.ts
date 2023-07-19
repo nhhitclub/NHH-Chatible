@@ -20,7 +20,7 @@ const LogChat = async (threadID: string, userID: string, message: string) => {
 }
 
 const StartLog = async (chatID: string, user1: string, user2: string) => {
-    const newThread = await DiscordClient.createThread(CHANNEL_ID, chatID, user1, user2);
+    const newThread = await DiscordClient.createThread("","","");
 
     return newThread.id;
 }

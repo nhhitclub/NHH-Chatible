@@ -24,7 +24,8 @@ class FacebookController {
                                 fields:"name,profile_pic",
                                 access_token: process.env.MESS_API
                         })
-        console.log(request.body)
+        // console.log(request.body)
+        return JSON.parse(request.text)
     }
 
     public async sendMessage(userID: string, messagePayload: MessageBuilder) {

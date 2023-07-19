@@ -1,10 +1,12 @@
 import { FacebookController, MessageBuilder } from "../../functions/facebook"
 import { Chat } from "../../functions/database";
 import { LogChat } from "../postback/procedure/chatLogProcedure";
+import { ChatControler } from "../../functions/chatroom";
 
 
 export const InChatHandle: Function = async (mess: any, userInDB: any, callback: Function = () => { }) => {
     const fbInstance: FacebookController = FacebookController.getInstance()
+    const chatManager:ChatControler = ChatControler.getInstance()
     const chatInDB = await Chat.findOne({ chatID: userInDB.currentChatID })
 
     const userID = mess.sender.id
@@ -18,9 +20,9 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
 
     if (messageInfo.text) {
         await fbInstance.sendTextOnlyMessage(anotherMember, messageInfo.text)
-        await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
-        await LogChat(chatInDB.threadID, userID, messageInfo.text)
-        
+        // await chatInDB.chatMess.push({ sender: userID, text: messageInfo.text, sent_time: mess.timestamp })
+        // await LogChat(chatInDB.threadID, userID, messageInfo.text)
+        chatManager.addTextChatRecord(userInDB.currentChatID,userID,messageInfo.text)
     }
     if (messageInfo.attachments) {
         messageInfo.attachments.forEach(async (attachment: any) => {
