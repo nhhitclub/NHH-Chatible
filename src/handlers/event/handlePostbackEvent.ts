@@ -39,14 +39,14 @@ export const handlePostbackEvent = async (mess: any) => {
             break
         }
 
-        // case "CHAT_REPORT_START": { 
-        //     await CHAT_REPORT_START(mess)
-        //     break
-        // }
+        case "CHAT_REPORT_START": { 
+            await CHAT_REPORT_START(mess)
+            break
+        }
 
-        // default: {
-        //     //sth about report here!
-        // }
+        default: {
+            //sth about report here!
+        }
             
     }
     
