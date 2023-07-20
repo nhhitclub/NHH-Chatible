@@ -1,15 +1,13 @@
 import { Chat, User } from "./database";
 import { DiscordClient } from "./discord";
-import { UserType, MessageType, ChatType } from "./interface";
+import { UserType, ChatType } from "./interface";
 import { v4 as id_generation } from "uuid";
 
 export class ChatController{
 
     private roomList:Array<ChatType> = []
-    private userCache:Array<UserType>= []
+    private userCache:Array<UserType> = []
     private static instance: ChatController;
-    // private discordController:DiscordClient = DiscordClient.getInstance()
-
 
     public static getInstance(): ChatController {
         if (!ChatController.instance) ChatController.instance = new ChatController();

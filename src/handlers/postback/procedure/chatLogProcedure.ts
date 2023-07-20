@@ -1,9 +1,8 @@
 import { DiscordClient } from "../../../functions/discord";
 
-const CHANNEL_ID = '1041402162166644876';
 
 const getLogThread = async (threadID: string) => {
-    const currentThread = await DiscordClient.getThread(CHANNEL_ID, threadID);
+    const currentThread = await DiscordClient.getThread(process.env.CHAT_THREAD_ID, threadID);
 
     return currentThread;
 }
