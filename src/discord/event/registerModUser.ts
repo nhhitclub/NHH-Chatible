@@ -7,16 +7,16 @@ module.exports = {
     name:"ready",
     once:true,
     execute: async () => {
-        let user = (await User.findOne({userID:"system"}))
-        if(!user ){
-            let sys_user = new User({
-                userID:"system",
-                role:"admin",
-                currentChatID:"",
-                displayName:"[Tài khoản hệ thống]",
-                avatarURl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJiKZwaPPDwtyIU3THO-T4inOzcwXwUADoiJZLT9Flik2D1N8LDBOecpy805yc6p6nmYE&usqp=CAU"
+        const user = await User.findOne({userID:"system"})
+        if(!user){
+            const sys_user = new User({
+                userID: "system",
+                role: "admin",
+                currentChatID: "",
+                displayName: "[Tài khoản hệ thống]",
+                avatarURl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJiKZwaPPDwtyIU3THO-T4inOzcwXwUADoiJZLT9Flik2D1N8LDBOecpy805yc6p6nmYE&usqp=CAU"
             })
-            sys_user.save()
+            await sys_user.save()
         }
     }
 }

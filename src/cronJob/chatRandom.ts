@@ -3,12 +3,12 @@ import { User, Chat } from "../functions/database";
 import { QueueManager } from "../functions/queueManager";
 import { v4 as uid_v4 } from "uuid";
 import { StartLog } from "../handlers/postback/procedure/chatLogProcedure";
-import { ChatControler } from "../functions/chatroom";
+import { ChatController } from "../functions/chatroom";
 
 export const handleChatRandom = async () => {
     const facebookControllerInstance: FacebookController = FacebookController.getInstance();
     const queueManagerInstance: QueueManager = QueueManager.getInstance();
-    const chatManager:ChatControler = ChatControler.getInstance()
+    const chatManager:ChatController = ChatController.getInstance()
 
     queueManagerInstance.shuffleUserInQueue();
 

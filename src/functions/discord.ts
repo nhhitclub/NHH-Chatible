@@ -4,7 +4,7 @@ import Discord, { ForumChannel, GuildForumThreadCreateOptions, WebhookClient } f
 
 import fs from "node:fs"
 import path from "node:path"
-import { ChatType, MessageType, UserType } from "./interface"
+import { ChatType, UserType } from "./interface"
 
 
 
@@ -18,15 +18,12 @@ function handleInteractionCreate(){
 }
 
 export class DiscordClient {
-    private static instance:DiscordClient
+
     private static client:Discord.Client = new Discord.Client({ intents: [Discord.GatewayIntentBits.Guilds] });
     static commands:Array<CommandsInterface> = []
     private static chatWebhookClient = new WebhookClient({ url: process.env.CHAT_WEBHOOK });
     
-    private constructor(){}
-    
-    public static getInstance(token?:string):DiscordClient{
-        if(!DiscordClient.instance) DiscordClient.instance = new DiscordClient()
+    public static initialization(token?:string){
         if(!(DiscordClient.client.isReady() as boolean) && token){
 
             //first load here
@@ -68,9 +65,8 @@ export class DiscordClient {
             })
 
 
-        } 
+        }
 
-        return DiscordClient.instance
     }
 
     public static async getChannelByID(id: string){

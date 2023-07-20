@@ -28,7 +28,7 @@ if(process.env.NEXT_DISABLE != "true"){
 }
 
 
-DiscordClient.getInstance(process.env.DISCORD_TOKEN) 
+DiscordClient.initialization(process.env.DISCORD_TOKEN) 
 
 
 app.use(express.json())

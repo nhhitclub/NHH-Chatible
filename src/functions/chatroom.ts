@@ -1,102 +1,80 @@
 import { Chat, User } from "./database";
 import { DiscordClient } from "./discord";
 import { UserType, MessageType, ChatType } from "./interface";
-import { v4 as uid_v4 } from "uuid";
+import { v4 as id_generation } from "uuid";
 
-export class ChatControler{
+export class ChatController{
 
     private roomList:Array<ChatType> = []
     private userCache:Array<UserType>= []
-    private static instance: ChatControler;
-    // private discordControler:DiscordClient = DiscordClient.getInstance()
+    private static instance: ChatController;
+    // private discordController:DiscordClient = DiscordClient.getInstance()
 
 
-    public static getInstance(): ChatControler {
-        if (!ChatControler.instance) ChatControler.instance = new ChatControler();
+    public static getInstance(): ChatController {
+        if (!ChatController.instance) ChatController.instance = new ChatController();
     
-        return ChatControler.instance;
+        return ChatController.instance;
     }
 
 
-    async createRoom(allUser:Array<UserType | string>):Promise<ChatType>{
-      let listUser:Array<UserType> = []
-      let userInfostring:string = ""
+    async createRoom(allUsers:Array<UserType | string>):Promise<ChatType>{
+      const listUser:Array<UserType> = []
+      let userInfoString:string = ""
 
-      //generate chatID
-      let chatID:string = uid_v4()
+      const chatID:string = id_generation()
 
       //reload type if not true
-      for (let index = 0; index < allUser.length; index++) {
-        let user = allUser[index];
+      await allUsers.forEach(async (user, index) => {
         if(typeof user == "string"){
-          listUser.push( (await User.findOne({userID:user})) as UserType )
+          listUser.push((await User.findOne({userID:user})) as UserType)
         }else{
-          listUser[index] = (allUser[index] as UserType)
+          listUser[index] = (user as UserType)
         }
         await User.findOneAndUpdate({ userID: user }, { currentChatID: chatID });
-        userInfostring = userInfostring+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`
-      }
+        userInfoString = userInfoString+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`
+      })
       
       
-      //generate Discord Thread room
-      let thread = await DiscordClient.createThread(process.env.CHAT_THREAD_ID,chatID,"Log chat có ID: **"+ chatID+"**\nCác thành viên:\n"+userInfostring)
+      const thread = await DiscordClient.createThread(
+        process.env.CHAT_THREAD_ID,chatID,
+        "Log chat có ID: **"+ chatID+"**\nCác thành viên:\n"+userInfoString
+      )
       
-      //save info to db
-      const chatModel = new Chat({
+      const userObj: any = {
         chatID,
         threadID:thread.id,
         members: listUser.map(user => user.userID),
         chatMess: [],
-      });
+      }
 
+      const chatModel = new Chat(userObj);
       await chatModel.save()
 
-      //save info to manager
+      userObj.members = listUser;
+      this.roomList.push(userObj);
 
-      let ChatRoom:ChatType = {
-        chatID,
-        threadID:thread.id,
-        members:listUser,
-        chatMess:[]
-      }
-      this.roomList.push(ChatRoom)
-      return ChatRoom
+      return userObj;
     }
 
     async addTextChatRecord(chatInput:string|ChatType,userInput:string|UserType,content:string){
-      //if room is id base, change it to chat type
-      let chat:ChatType 
-      let user:UserType 
+      
+      const chat:ChatType = 
+        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput;
 
-      if(typeof chatInput == "string"){
-        chat = this.roomList.find(f => f.chatID == chatInput)
-      }else{
-        chat = chatInput
-      }
-      //if user is id base, change it to user type
-      if(typeof userInput == "string"){
-        user = this.userCache.find(f => f.userID == userInput)
-        // console.log(user)
-        //double check if cache being pruge
-        if(!user){
-          user = await User.findOne({userID:userInput})
-          this.userCache.push(user)
-        }
-      }else{
-        user = userInput
-      }
+      const user:UserType = (typeof userInput == "string") ? (
+        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
+      ) : userInput;
 
-      //send to discord
-      await DiscordClient.sendTextChatToChatLog(user,chat,content)
+      if(!this.userCache.find(f => f.userID == userInput)) this.userCache.push(user);
 
-      //send a save to db
+      await DiscordClient.sendTextChatToChatLog(user, chat, content)
+
       const chatInDB = await Chat.findOne({ chatID: chat.chatID })
       chatInDB.chatMess.push({ sender: user.userID, text: content, sent_time: Date.now() })
       chatInDB.save()
 
     }
-
-    
 
 
 
