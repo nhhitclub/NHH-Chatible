@@ -15,17 +15,7 @@ export const handleChatRandom = async () => {
     const chatRoomList = queueManagerInstance.popUserToChat();
 
     chatRoomList.forEach(async (chatRoom) => {
-        // const chatID = uid_v4();
-        // const threadID = await StartLog(chatID, chatRoom[0], chatRoom[1]);
-
-        // const chatModel = new Chat({
-        //     chatID,
-        //     threadID,
-        //     members: chatRoom,
-        //     chatMess: [],
-        // });
-
-        // await chatModel.save();
+        console.log(chatRoom)
 
         chatManager.createRoom([chatRoom[0],chatRoom[1]])
         

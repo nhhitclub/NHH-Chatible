@@ -1,12 +1,23 @@
+import { ChatController } from "../../functions/chatroom";
 import { User } from "../../functions/database";
-import { EndChatProcedure } from "./procedure/endChatProcedure";
+import { ChatType } from "../../functions/interface";
+import { EndChatMessage } from "../message/endChatMessage";
 
 export default async function END_CHAT(mess: any) {
     const userID = mess.sender.id;
+    let chatManager:ChatController = ChatController.getInstance()
+    const chatInfo:ChatType = chatManager.findChatRecord(userID)
+
+    chatInfo.members.forEach(async (mem)=>{
+        EndChatMessage(mem.userID,chatInfo.chatID)
+    })
+    chatManager.endChatRecord(chatInfo,userID)
+
     // const deletedChatRoom = await Chat.findOneAndDelete({ members: userID }); // we still keep this one for
     // const members = deletedChatRoom.members;
     
-    const senderInfo = await User.findOne({ userID })
-    await EndChatProcedure(senderInfo.currentChatID);
+    // const senderInfo = await User.findOne({ userID })
+    // await EndChatProcedure(senderInfo.currentChatID);
+    
 
 };

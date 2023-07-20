@@ -77,6 +77,9 @@ export class DiscordClient {
         return (await DiscordClient.getChannelByID(channelID) as ForumChannel).threads.fetch(threadID);
     }
     
+    public static async getChatThread( threadID: string){
+        return (await DiscordClient.getChannelByID(process.env.CHAT_THREAD_ID) as ForumChannel).threads.fetch(threadID);
+    }
     
     public static async createThread(channelID : string, name: string,startContent:string){
         return (await DiscordClient.getChannelByID(channelID) as ForumChannel)

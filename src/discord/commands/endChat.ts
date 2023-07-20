@@ -1,6 +1,9 @@
 import Discord, { EmbedBuilder } from "discord.js"
 import { EndChatProcedure } from "../../handlers/postback/procedure/endChatProcedure";
 import { getLogThread } from "../../handlers/postback/procedure/chatLogProcedure";
+import { ChatController } from "../../functions/chatroom";
+import { ChatType } from "../../functions/interface";
+import { EndChatMessage } from "../../handlers/message/endChatMessage";
 
 
 module.exports = {
@@ -12,31 +15,33 @@ module.exports = {
         ),
         
 	async execute(interaction:any) {
+        const chatManager:ChatController = ChatController.getInstance()
 
-        const fbChannelID = 
-            interaction.options.getChannel('channel')?.name ||
-            ((await getLogThread(interaction.channelId)).name);
+        // const fbChannelID = interaction.options.getChannel('channel')?.name || (await ChatController.getInstance().findChatRecordByThreadId(interaction.channelId)).chatID;
         
+        const chatInfo:ChatType = chatManager.findChatRecord(interaction.options.getChannel('channel')?.name) || ChatController.getInstance().findChatRecordByThreadId(interaction.channelId)
+
         const embed:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)
             .addFields({
-                name: 'CHAT DB-ID ' + fbChannelID + ' ENDED',
-                value: 'Chat was ended by admin'
+                name: 'kết thúc đoạn chat: ' + chatInfo.chatID ,
+                value: 'Đoạn chat đã kết thúc bởi '+(await interaction.guild.members.fetch(interaction.user.id)).user.username
+
             });
     
         try{
-    
-            await EndChatProcedure(fbChannelID, true);
-    
+            chatManager.endChatRecord(chatInfo,"system")
+
+            await chatInfo.members.forEach(async (member) => {
+                await EndChatMessage(member.userID,chatInfo.chatID,true)
+            })
+
+            // await EndChatProcedure(fbChannelID, true);
+            await interaction.reply({embeds:[embed]})
         }catch(er){
-            await interaction.reply({ content: 'Error, invalid channel', ephemeral: true });
+            await interaction.reply({ content: 'Không thể tìm thấy channel hoặc đã có lỗi xảy ra', ephemeral: true });
             return;
         }
-    
-        try{
-    
-            await interaction.reply({embeds:[embed]})
-        }catch(e){}
         
 	},
 };

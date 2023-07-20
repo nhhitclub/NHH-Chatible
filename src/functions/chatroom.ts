@@ -26,11 +26,16 @@ export class ChatController{
       await allUsers.forEach(async (user, index) => {
         if(typeof user == "string"){
           listUser.push((await User.findOne({userID:user})) as UserType)
+          await User.findOneAndUpdate({ userID: user }, { currentChatID: chatID });// TODO: bug here
         }else{
           listUser[index] = (user as UserType)
+          await User.findOneAndUpdate({ userID: listUser[index].userID}, { currentChatID: chatID });// TODO: bug here
+
         }
-        await User.findOneAndUpdate({ userID: user }, { currentChatID: chatID });
-        userInfoString = userInfoString+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`
+        //add user to cache
+        await this.userCache.push(listUser[index])
+        //add to userInfostring
+        await (userInfoString = userInfoString+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`)
       })
       
       
@@ -58,7 +63,7 @@ export class ChatController{
     async addTextChatRecord(chatInput:string|ChatType,userInput:string|UserType,content:string){
       
       const chat:ChatType = 
-        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput;
+        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput)  : chatInput; //TODO: add chat info from db if cannot find
 
       const user:UserType = (typeof userInput == "string") ? (
         this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
@@ -74,6 +79,34 @@ export class ChatController{
 
     }
 
+    async endChatRecord(chatInput:string|ChatType,userInput:string|UserType){
+      const chat:ChatType = 
+        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput; //TODO: add chat info from db if cannot find
+
+      const user:UserType = (typeof userInput == "string") ? (
+        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
+      ) : userInput;
+
+      // if(!this.userCache.find(f => f.userID == userInput)) this.userCache.push(user);
+
+      //cập nhật dữ liệu lên db và xóa dữ liệu trong cache
+      chat.members.forEach(async (mem) =>{
+        //cập nhật dữ liệu db
+        await User.findOneAndUpdate({ userID: mem.userID }, { currentChatID: "" });
+        this.userCache.filter((val,ind,arr)=> { if(val.userID == mem.userID ){arr.splice(ind,1);return true} return false})
+      })
+
+
+      this.addTextChatRecord(chat,"system","Đoạn chat đã được kết thúc bởi: "+ user.displayName+" - "+user.userID)
+    }
+
+    findChatRecord(chatInput:string|ChatType){
+      return (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput
+    }
+
+    findChatRecordByThreadId(threadID:string){
+      return this.roomList.find(f => f.threadID == threadID)
+    }
 
 
 }

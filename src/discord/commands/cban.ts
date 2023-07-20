@@ -1,6 +1,9 @@
 import Discord, { EmbedBuilder } from "discord.js"
 import { BanSentence, User } from "../../functions/database"
 import { FacebookController } from "../../functions/facebook";
+import { ChatType, UserType } from "../../functions/interface";
+import { ChatController } from "../../functions/chatroom";
+import { EndChatMessage } from "../../handlers/message/endChatMessage";
 
 
 module.exports = {
@@ -28,7 +31,7 @@ module.exports = {
         )
         .addStringOption(option => 
             option.setName('reason')
-            .setDescription('taiii saoooo').setRequired(true)
+            .setDescription('Tại sao thế ?').setRequired(true)
         )
     ,
 	async execute(interaction:any) {
@@ -78,8 +81,25 @@ module.exports = {
 
         await banSentence.save();
 
-        await FacebookController.getInstance()
-        .sendTextOnlyMessage(userID, 'Bạn đã bị ban trong ' + duration+unit + ' vì lý do: ' + reason)
+        await FacebookController.getInstance().sendTextOnlyMessage(userID, 'Bạn đã bị ban trong ' + duration+unit + ' vì lý do: ' + reason)
+        await FacebookController.getInstance().sendTextOnlyMessage(userID, "Các yêu cầu kháng cáo xin gửi về email "+"")
+
+        if(user.currentChatID != ""){
+            let chatManager:ChatController = ChatController.getInstance()
+            const chatInfo:ChatType = chatManager.findChatRecord(user.currentChatID)
+            
+            chatInfo.members.forEach(async (mem)=>{
+                if(mem == userID){
+                    await EndChatMessage(mem.userID,user.currentChatID,true,false)
+                }else{
+                    await EndChatMessage(mem.userID,user.currentChatID,true)
+
+                }
+            })
+            chatManager.endChatRecord(chatInfo,"system")
+
+
+        }
 
         const em:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)

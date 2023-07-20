@@ -1,3 +1,5 @@
+import { User } from "../../functions/database"
+import { FacebookController } from "../../functions/facebook"
 import CHAT_REQUEST from "../postback/CHAT_REQUEST"
 import END_CHAT from "../postback/END_CHAT"
 import EXISTED_USER_START from "../postback/EXISTED_USER_START"
@@ -7,6 +9,10 @@ import CHAT_REPORT_START from "../postback/report/CHAT_REPORT_START"
 import START_FEEDBACK from "../postback/START_FEEDBACK"
 
 export const handlePostbackEvent = async (mess: any) => {
+    let face:FacebookController = FacebookController.getInstance()
+
+    let userFind = await User.findOne({ userID: mess.sender.id })
+    if(userFind.role == "banned") return face.sendTextOnlyMessage(mess.sender.id,"Tài khoản của bạn đã bị từ chối, xin cảm ơn")
     
     switch(mess.postback.payload) {
         case "CHAT_REQUEST": {
