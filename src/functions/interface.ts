@@ -6,6 +6,13 @@ export type UserType = {
     avatarURL:String
 }
 
+export type BanSentenceType = {
+    userID: String,
+    reason: String,
+    expires: Date,
+    startTime: Date,
+}
+
 export type MessageType = {
     sender: String,
     text: String,
