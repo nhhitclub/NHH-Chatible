@@ -86,7 +86,7 @@ module.exports = {
 
         if(user.currentChatID != ""){
             let chatManager:ChatController = ChatController.getInstance()
-            const chatInfo:ChatType = chatManager.findChatRecord(user.currentChatID)
+            const chatInfo:ChatType = await chatManager.findChatRecord(user.currentChatID)
             
             chatInfo.members.forEach(async (mem)=>{
                 if(mem == userID){

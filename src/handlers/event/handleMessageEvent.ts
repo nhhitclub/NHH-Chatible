@@ -13,19 +13,13 @@ export const handleMessageEvent = async (mess: any) => {
   
   if (!userInDB) {
     return await NewUserRequestHandle(userID)
-  }
-
-  if (userInDB.role == "banned") {
+  }else if (userInDB.role == "banned") {
     return await FacebookController.getInstance().sendTextOnlyMessage(userID,"Tài khoản của bạn đã bị từ chối, xin cảm ơn")
-  }
-
-  if (mess.message.attachments?.[0].payload.sticker_id === 369239263222822) {
+  }else if (mess.message.attachments?.[0].payload.sticker_id === 369239263222822) {
     return await MenuHandle(userID, userInDB)
-  }
-
-  if (userInDB?.currentChatID === "") {
+  }else if (userInDB?.currentChatID === "") {
     return await NoneChattingHandle(userID)
+  }else{
+    return await InChatHandle(mess, userInDB)
   }
-
-  return await InChatHandle(mess, userInDB)
 }

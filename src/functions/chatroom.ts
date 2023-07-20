@@ -15,6 +15,36 @@ export class ChatController{
         return ChatController.instance;
     }
 
+    private async cacheUserCorrect(userInput:string|UserType):Promise<UserType>{
+      return (typeof userInput == "string") ? (
+        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
+      ) : userInput
+    }
+
+
+    async findChatRecord(chatInput: string | ChatType): Promise<ChatType> {
+      let chat: ChatType
+      if(typeof chatInput == "string"){
+        let roomData = this.roomList.find(f => f.chatID == chatInput)
+        if(!roomData){
+          let dbData:ChatType = await Chat.findOne({ chatID: chatInput }) 
+          chat = dbData
+          chat.members = []
+          await dbData.members.forEach(async (member:any) => {
+            let user:UserType = (await this.cacheUserCorrect(member))
+            console.log(member)
+            chat.members.push(user)
+          })
+        }else{
+          chat = roomData
+        }
+      }else{
+        chat = chatInput
+      }
+      // console.log(chat)
+      return chat
+    }
+
 
     async createRoom(allUsers:Array<UserType | string>):Promise<ChatType>{
       const listUser:Array<UserType> = []
@@ -62,14 +92,19 @@ export class ChatController{
 
     async addTextChatRecord(chatInput:string|ChatType,userInput:string|UserType,content:string){
       
-      const chat:ChatType = 
-        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput)  : chatInput; //TODO: add chat info from db if cannot find
+      // const chat:ChatType = 
+      //   (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) || await Chat.findOne({chatID:chatInput}) : chatInput; //TODO: add chat info from db if cannot find
 
-      const user:UserType = (typeof userInput == "string") ? (
-        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
-      ) : userInput;
 
-      if(!this.userCache.find(f => f.userID == userInput)) this.userCache.push(user);
+      // const user:UserType = (typeof userInput == "string") ? (
+      //   this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
+      // ) : userInput;
+
+      // if(!this.userCache.find(f => f.userID == user.userID)) this.userCache.push(user);
+      // if(!this.roomList.find(f => f.chatID == chat.chatID)) this.roomList.push(chat); 
+      let chat:ChatType = await this.findChatRecord(chatInput)
+      let user:UserType = await this.cacheUserCorrect(userInput)
+
 
       await DiscordClient.sendTextChatToChatLog(user, chat, content)
 
@@ -80,32 +115,30 @@ export class ChatController{
     }
 
     async endChatRecord(chatInput:string|ChatType,userInput:string|UserType){
-      const chat:ChatType = 
-        (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput; //TODO: add chat info from db if cannot find
+      let chat:ChatType = await this.findChatRecord(chatInput)
+      let user:UserType = await this.cacheUserCorrect(userInput)
 
-      const user:UserType = (typeof userInput == "string") ? (
-        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
-      ) : userInput;
+      // if(!this.userCache.find(f => f.userID == user.userID)) this.userCache.push(user);
+      // if(!this.roomList.find(f => f.chatID == chat.chatID)) this.roomList.push(chat); 
 
-      // if(!this.userCache.find(f => f.userID == userInput)) this.userCache.push(user);
-
+      // console.log(chat)
+      // console.log(user)
       //cập nhật dữ liệu lên db và xóa dữ liệu trong cache
       chat.members.forEach(async (mem) =>{
         //cập nhật dữ liệu db
-        await User.findOneAndUpdate({ userID: mem.userID }, { currentChatID: "" });
-        this.userCache.filter((val,ind,arr)=> { if(val.userID == mem.userID ){arr.splice(ind,1);return true} return false})
+        await User.findOneAndUpdate({ userID: typeof mem == "string" ? mem : mem.userID }, { currentChatID: "" });
+        this.userCache.filter((val,ind,arr)=> { if(val.userID == (typeof mem == "string" ? mem : mem.userID) ){arr.splice(ind,1);return true} return false})
       })
 
 
       this.addTextChatRecord(chat,"system","Đoạn chat đã được kết thúc bởi: "+ user.displayName+" - "+user.userID)
     }
 
-    findChatRecord(chatInput:string|ChatType){
-      return (typeof chatInput == "string") ? this.roomList.find(f => f.chatID == chatInput) : chatInput
-    }
 
-    findChatRecordByThreadId(threadID:string){
-      return this.roomList.find(f => f.threadID == threadID)
+  
+
+    async findChatRecordByThreadId(threadID:string):Promise<ChatType>{
+      return this.roomList.find(f => f.threadID == threadID) || await Chat.findOne({threadID:threadID})
     }
 
 

@@ -29,22 +29,28 @@ module.exports = {
             return;
         }
 
-        let targetUser = interaction.options.getString('targetUser')
+        let targetUser = interaction.options.getString('targetuser')
+        let content = interaction.options.getString('message')
 		
         const chatDB = await Chat.findOne({ chatID: thread.name })
         let member:Array<string> = [] 
+        console.log(targetUser)
         if(targetUser){
+            console.log(1)
             member.push(targetUser)
+            chatManager.addTextChatRecord(thread.name,"system",`${targetUser}-${content}`)
         }else{
-            member = chatDB.members.map((f : any) => f.userID);
+            chatManager.addTextChatRecord(thread.name,"system",`${content}`)
+            member = chatDB.members
         }
         console.log(targetUser)
-        const msg = "Tin nhắn đến từ chủ tịch: " + interaction.options.getString('message');
+        const msg = "Tin nhắn đến từ admin: " + content;
         member.forEach(async (mem) => {
             // console.log(mem)
             await fbInstance.sendTextOnlyMessage(mem, msg)
 
         })
+
 		const em:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)
             .addFields({
