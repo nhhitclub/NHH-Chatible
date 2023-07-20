@@ -1,7 +1,7 @@
 import { FacebookController, TemplateBuilder } from "../../functions/facebook";
 import { QueueManager } from "../../functions/queueManager";
 
-export default async function handlePostbackEvent(mess: any) {
+export default async function CHAT_REQUEST(mess: any) {
     const userID = mess.sender.id;
     const fbInstance = FacebookController.getInstance();
     

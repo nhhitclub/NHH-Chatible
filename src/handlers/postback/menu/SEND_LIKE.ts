@@ -1,8 +1,7 @@
 import { FacebookController } from "../../../functions/facebook"
 import { Chat, User } from "../../../functions/database"
 
-export const SEND_LIKE = async (mess: any) => {
-
+export default async function SEND_LIKE(mess: any) {
     const user = await User.findOne({ userID: mess.sender.id })
     const chat = await Chat.findOne({ members: user.userID })
 

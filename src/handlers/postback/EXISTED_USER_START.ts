@@ -2,7 +2,7 @@ import { FacebookController } from "../../functions/facebook"
 import { User } from "../../functions/database"
 
 
-export default async function handlePostbackEvent(mess: any) {
+export default async function EXISTED_USER_START(mess: any) {
     const userID = mess.sender.id
     const userInDB = await User.find({ userID })
     const facebookControllerInstance = FacebookController.getInstance();
