@@ -2,6 +2,9 @@ import Discord, { EmbedBuilder, ThreadChannel } from "discord.js"
 import { getLogThread } from "../../handlers/postback/procedure/chatLogProcedure";
 import { Chat } from "../../functions/database";
 import { FacebookController } from "../../functions/facebook";
+import { ChatController } from "../../functions/chatroom";
+import { DiscordClient } from "../../functions/discord";
+import { UserType } from "../../functions/interface";
 
 module.exports = {
 	data: new Discord.SlashCommandBuilder()
@@ -9,25 +12,39 @@ module.exports = {
 		.setDescription('"Vô tình" chen ngang cuộc nói chuyện, chỉ hoạt động trong thread')
         .addStringOption(option => 
             option.setName('message').setDescription('Muốn nói gì thầm kín thì ghi vào đây').setRequired(true)
+        )
+        .addStringOption(option => 
+            option.setName('targetuser').setDescription('Nhắn đến chính xác ai')
         ),
         
 	async execute(interaction: any) {
+        const chatManager:ChatController = ChatController.getInstance()
+        const fbInstance: FacebookController = FacebookController.getInstance()
 
-        const thread = await getLogThread(interaction.channelId);
+
+        const thread = await DiscordClient.getChatThread(interaction.channelId);
         
         if(thread.type !== 11){
             await interaction.reply({ content: 'Error, invalid channel', ephemeral: true })
             return;
         }
+
+        let targetUser = interaction.options.getString('targetUser')
 		
-        const fbInstance: FacebookController = FacebookController.getInstance()
         const chatDB = await Chat.findOne({ chatID: thread.name })
-        const members = chatDB.members;
-        const msg = "*ADMIN*: " + interaction.options.getString('message') + " -- " + new Date().toLocaleString("vi-VN");
+        let member:Array<string> = [] 
+        if(targetUser){
+            member.push(targetUser)
+        }else{
+            member = chatDB.members.map((f : any) => f.userID);
+        }
+        console.log(targetUser)
+        const msg = "Tin nhắn đến từ chủ tịch: " + interaction.options.getString('message');
+        member.forEach(async (mem) => {
+            // console.log(mem)
+            await fbInstance.sendTextOnlyMessage(mem, msg)
 
-        await fbInstance.sendTextOnlyMessage(members[0], msg)
-        await fbInstance.sendTextOnlyMessage(members[1], msg) 
-
+        })
 		const em:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)
             .addFields({

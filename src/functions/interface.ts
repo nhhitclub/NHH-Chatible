@@ -1,30 +1,32 @@
 export type UserType = {
-    userID: String,
-    role: String,
-    currentChatID: String,
-    displayName:String,
-    avatarURL:String
+    userID: string,
+    role: string,
+    currentChatID: string,
+    displayName:string,
+    avatarURL:string
 }
 
 export type BanSentenceType = {
-    userID: String,
-    reason: String,
+    userID: string,
+    reason: string,
     expires: Date,
     startTime: Date,
 }
 
 export type MessageType = {
-    sender: String,
-    text: String,
-    attachmentURL: String,
-    emoji_ID: String,
+    sender: string,
+    text: string,
+    attachmentURL: string,
+    emoji_ID: string,
     sent_time: { type : Date }
 }
 
 export type ChatType = {
-    chatID: String,
-    threadID: String,
+    chatID: string,
+    threadID: string,
     members: Array<UserType>,
     chatMess: Array<MessageType>
 }
+
+//string or String?
 
