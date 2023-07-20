@@ -1,11 +1,12 @@
 import { User } from "../../functions/database"
 import { FacebookController } from "../../functions/facebook"
 import CHAT_REQUEST from "../postback/CHAT_REQUEST"
-import { END_CHAT } from "../postback/END_CHAT"
+import END_CHAT from "../postback/END_CHAT"
 import EXISTED_USER_START from "../postback/EXISTED_USER_START"
-import { SEND_LIKE } from "../postback/menu/SEND_LIKE"
-import { REMOVE_FROM_QUEUE } from "../postback/REMOVE_FROM_QUEUE"
-import { START_FEEDBACK } from "../postback/START_FEEDBACK"
+import SEND_LIKE from "../postback/menu/SEND_LIKE"
+import REMOVE_FROM_QUEUE from "../postback/REMOVE_FROM_QUEUE"
+import CHAT_REPORT_START from "../postback/report/CHAT_REPORT_START"
+import START_FEEDBACK from "../postback/START_FEEDBACK"
 
 export const handlePostbackEvent = async (mess: any) => {
     let face:FacebookController = FacebookController.getInstance()
@@ -43,6 +44,15 @@ export const handlePostbackEvent = async (mess: any) => {
             await END_CHAT(mess)
             break
         }
+
+        // case "CHAT_REPORT_START": { 
+        //     await CHAT_REPORT_START(mess)
+        //     break
+        // }
+
+        // default: {
+        //     //sth about report here!
+        // }
             
     }
     

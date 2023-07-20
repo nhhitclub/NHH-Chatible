@@ -1,6 +1,6 @@
 import { FacebookController } from "../../functions/facebook"
 
-export const START_FEEDBACK = async (mess: any) => {
+export default async function START_FEEDBACK(mess: any) {
     await FacebookController.getInstance().sendFeedback(mess.sender.id)
     
 }

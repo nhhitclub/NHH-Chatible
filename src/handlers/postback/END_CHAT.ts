@@ -3,7 +3,7 @@ import { User } from "../../functions/database";
 import { ChatType } from "../../functions/interface";
 import { EndChatMessage } from "../message/endChatMessage";
 
-export const END_CHAT = async (mess: any) => {
+export default async function END_CHAT(mess: any) {
     const userID = mess.sender.id;
     let chatManager:ChatController = ChatController.getInstance()
     const chatInfo:ChatType = chatManager.findChatRecord(userID)

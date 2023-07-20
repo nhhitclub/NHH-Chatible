@@ -1,7 +1,7 @@
 import { FacebookController, TemplateBuilder } from "../../functions/facebook";
 import { QueueManager } from "../../functions/queueManager"
 
-export const REMOVE_FROM_QUEUE = async (mess: any) => {
+export default async function REMOVE_FROM_QUEUE(mess: any) {
     QueueManager.getInstance().rmUserFromQueue(mess.sender.id);
 
     const templateBuilder: TemplateBuilder = new TemplateBuilder()
