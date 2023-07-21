@@ -1,6 +1,4 @@
 import Discord, { EmbedBuilder } from "discord.js"
-import { EndChatProcedure } from "../../handlers/postback/procedure/endChatProcedure";
-import { getLogThread } from "../../handlers/postback/procedure/chatLogProcedure";
 import { ChatController } from "../../functions/chatroom";
 import { ChatType } from "../../functions/interface";
 import { EndChatMessage } from "../../handlers/message/endChatMessage";
@@ -36,7 +34,7 @@ module.exports = {
             chatManager.endChatRecord(chatInfo,"system")
 
             await chatInfo.members.forEach(async (member) => {
-                await EndChatMessage(member.userID,chatInfo.chatID,true)
+                await EndChatMessage(member.userID, chatInfo, true)
             })
 
             // await EndChatProcedure(fbChannelID, true);

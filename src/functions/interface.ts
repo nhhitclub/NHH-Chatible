@@ -22,6 +22,9 @@ export type MessageType = {
 }
 
 export type ChatType = {
+    _doc?: {
+        _id?: string
+    },
     chatID: string,
     threadID: string,
     members: Array<UserType>,
