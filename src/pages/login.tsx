@@ -1,5 +1,3 @@
-import React from "react"
-
 export default function () {
     return (
         <>
@@ -10,11 +8,11 @@ export default function () {
                         <h4 className="card-title">Chào bé, đăng nhập đi bé</h4>
                         <form>
                             <label>Tên đăng nhập</label>
-                            <input type="text" name="name" className="form-control"/>
+                            <input type="text" name="name" className="form-control" />
                             <label>Mật khẩu</label>
-                            <input type="text" name="name" className="form-control"/>
+                            <input type="text" name="name" className="form-control" />
                             <div>Đây là nút đăng nhập</div>
-                            <input type="submit" value="Đăng nhập" className="btn btn-primary" /> 
+                            <input type="submit" value="Đăng nhập" className="btn btn-primary" />
                             <div>Đây cũng là nút đăng nhập</div>
                             <input type="submit" value="Cũng là đăng nhập nhưng là màu xanh" className="btn btn-success" />
                             <div>Chỗ này mới là nút đăng nhập nè</div>
