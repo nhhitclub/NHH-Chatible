@@ -1,17 +1,15 @@
-import React from "react"
 import CollapseDropdown from "../webComponent/CollapseDropdown"
 
 export default function () {
     return (
         <>
-            <div className="container">
-                <br /><br />
+            <div className="container mb-2">
                 <div className="card text-left">
                     <div className="card-body">
                         <div>
-                        <h4 className="card-title text-center display-5 text-uppercase">Điều khoản sử dụng</h4>
-                        <p className="text-center">Áp dụng cho toàn bộ hệ thống và các dịch vụ của NHH Chatible</p>
-                        <div className="mb-5"></div>
+                            <h4 className="card-title text-center display-5 text-uppercase">Điều khoản sử dụng</h4>
+                            <p className="text-center">Áp dụng cho toàn bộ hệ thống và các dịch vụ của NHH Chatible</p>
+                            <div className="mb-5"></div>
                         </div>
                         <div className="container">
                             <ul>

@@ -85,8 +85,8 @@ class TemplateBuilder {
         this.data.buttons.push({ type: "postback", title, payload });
         return this;
     }
-    addWebviewButton(title: string, url: string) {
-        this.data.buttons.push({ type: "web_url", title, url });
+    addWebviewButton(title: string, url: string, ext: boolean = false) {
+        this.data.buttons.push({ type: "web_url", title, url, messenger_extensions: ext });
         return this;
     }
 }

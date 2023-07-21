@@ -92,7 +92,7 @@ export class DiscordClient {
     }
 
     public static async sendTextChatToChatLog(user:UserType,chat:ChatType,message:string){
-        this.chatWebhookClient.send({ 
+        await this.chatWebhookClient.send({ 
             username:`${user.displayName} - ${user.userID}`,
             avatarURL:(user.avatarURL as string),
             content:message,
