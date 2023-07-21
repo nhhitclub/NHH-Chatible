@@ -8,7 +8,8 @@ export default async function END_CHAT(mess: any) {
     const userID = mess.sender.id;
     let chatManager:ChatController = ChatController.getInstance()
     const senderInfo = await User.findOne({ userID })
-    if(senderInfo.currentChatID == "") return FacebookController.getInstance().sendTextOnlyMessage(userID,"Bạn hiện đang không ở trong đoạn chat nào")
+    if(senderInfo.currentChatID == "") 
+        return FacebookController.getInstance().sendTextOnlyMessage(userID,"Bạn hiện đang không ở trong đoạn chat nào")
 
     const chatInfo:ChatType = await chatManager.findChatRecord(senderInfo.currentChatID)
 

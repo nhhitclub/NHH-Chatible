@@ -17,32 +17,31 @@ export class ChatController{
 
     private async cacheUserCorrect(userInput:string|UserType):Promise<UserType>{
       return (typeof userInput == "string") ? (
-        this.userCache.find(f => f.userID == userInput) || await User.findOne({userID:userInput})
+        this.userCache.find(f => f.userID == userInput) || (await User.findOne({userID:userInput}))
       ) : userInput
     }
 
 
-    async findChatRecord(chatInput: string | ChatType): Promise<ChatType> {
-      let chat: ChatType
-      if(typeof chatInput == "string"){
-        let roomData = this.roomList.find(f => f.chatID == chatInput)
-        if(!roomData){
-          let dbData:ChatType = await Chat.findOne({ chatID: chatInput }) 
-          chat = dbData
-          chat.members = []
-          await dbData.members.forEach(async (member:any) => {
-            let user:UserType = (await this.cacheUserCorrect(member))
-            console.log(member)
-            chat.members.push(user)
-          })
-        }else{
-          chat = roomData
-        }
-      }else{
-        chat = chatInput
+    public async findChatRecord(chatInput: string | ChatType): Promise<ChatType> {
+      if(typeof chatInput != "string"){
+        return chatInput;
       }
-      // console.log(chat)
-      return chat
+
+      const roomData = this.roomList.find(f => f.chatID == chatInput)
+      if(roomData) return roomData;
+      
+      const dbData = await Chat.findOne({ chatID: chatInput }) 
+      const members = await Promise.all(
+         dbData.members.map(async (member: any) => await this.cacheUserCorrect(member))
+      )
+      const chat: ChatType = {
+        chatID: dbData.chatID,
+        threadID: dbData.threadID,
+        members,
+        chatMess: dbData.chatMess
+      }
+
+      return chat;
     }
 
 

@@ -1,4 +1,5 @@
 import Discord, { EmbedBuilder } from "discord.js"
+import { ChatController } from "../../functions/chatroom";
 
 module.exports = {
 	data: new Discord.SlashCommandBuilder()
@@ -15,6 +16,8 @@ module.exports = {
             });
 
 
+        const hi = await ChatController.getInstance().findChatRecord('7a460f0e-184d-4de0-a88a-b434e6e15637');
+        console.log(hi.members);
         await interaction.reply({embeds:[em]})
 	}
 };

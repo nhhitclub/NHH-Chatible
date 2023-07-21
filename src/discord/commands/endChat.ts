@@ -19,7 +19,10 @@ module.exports = {
 
         // const fbChannelID = interaction.options.getChannel('channel')?.name || (await ChatController.getInstance().findChatRecordByThreadId(interaction.channelId)).chatID;
         
-        const chatInfo:ChatType = await (chatManager.findChatRecord(interaction.options.getChannel('channel')?.name) || ChatController.getInstance().findChatRecordByThreadId(interaction.channelId))
+        const chatInfo:ChatType = 
+            await (chatManager.findChatRecord(
+                    interaction.options.getChannel('channel')?.name
+            ) || ChatController.getInstance().findChatRecordByThreadId(interaction.channelId))
 
         const embed:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)
