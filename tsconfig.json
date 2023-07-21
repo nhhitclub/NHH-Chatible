@@ -1,6 +1,8 @@
 {
   "include": [
-    "src/**/*"
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
   ],
   "compilerOptions": {
     "target": "es2021",
@@ -10,20 +12,24 @@
       "es2021.promise"
     ],
     "outDir": "dist",
-    "noImplicitAny": true,
     "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "jsx": "preserve",
     "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": false,
-    "incremental": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "skipLibCheck": false,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true
   },
-  "exclude": ["dist", ".next", "out", "next.config.js", "src/pages/**/**"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "exclude": [
+    "dist",
+    ".next",
+    "out",
+    "next.config.js"
+  ]
 }
