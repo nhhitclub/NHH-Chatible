@@ -20,6 +20,8 @@ import { EmbedBuilder, TextChannel } from "discord.js";
 const app:express.Express = express()
 const db = mongoose.connection
 const TOKEN_DURATION = 60 * 60 * 1000;
+let submittedToken: Array<{token: string, date: Date}> = []
+
 DiscordClient.initialization(process.env.DISCORD_TOKEN) 
 
 mongoose.set('strictQuery', true);
@@ -34,43 +36,58 @@ if(process.env.NEXT_DISABLE != "true"){
   const webApp:NextServer = next({dev})
   webApp.prepare()
   const webAppRequestHandle = webApp.getRequestHandler()
+
+  //! PLEASE DO NOT ALTER THE POSITION OF EACH LINE, AS IT WAS DESIGNED TO PREVENT TIMING ATTACK
   app.post('/report', async (req, res) => {
     const current = new Date();
     const q = req.query
-    const chatbox = await Chat.findOne({ chatID: q.cid })
+
+    if(submittedToken.some((i: any) => i.token === q.tk.toString())){
+      res.status(403).redirect('/report-done');
+      return;
+    }
+
     const validation = CryptoService.validate(
       q.tk.toString(), 
       q.uid.toString(), 
       q.cid.toString(), 
-      chatbox.threadID, 
-      chatbox?._doc._id.toString())
+      q.tid.toString(), 
+      q.oid.toString())
 
-    const expDate = new Date(CryptoService.extractDate(q.tk.toString()));
+    const stdate = new Date(CryptoService.extractDate(q.tk.toString()));
+    const expDate = new Date();
     expDate.setTime(expDate.getTime() + TOKEN_DURATION)
     const gap = expDate.getTime() - current.getTime();
     const expired = gap < 0;
 
     
     if(!validation || expired){
-      res.send('NOOOO').status(403);
+      res.status(403).redirect('/report-failed');
       return;
     }
+
+    submittedToken = submittedToken.filter((i: any) => {
+      i.date.setTime(i.date.getTime() + TOKEN_DURATION)
+      const gap = i.date.getTime() - (new Date()).getTime();
+      
+      return gap >= 0;
+    })
+    submittedToken.push({token: q.tk.toString(), date: stdate })
     
     const channel = await DiscordClient.getChannelByID('1041289492792889394') as TextChannel;
     const em:EmbedBuilder = new EmbedBuilder()
       .setColor(0x0099FF)
       .addFields({
-          name: 'CHAT REPORTED: <#' + chatbox.threadID + '>',
-          value: 'Phân loại: ' + req.body.issue_content + '\nChi tiết : ' + req.body.description
+          name: 'CHAT REPORTED: <#' + q.tid + '>',
+          value: 'Phân loại: ' + req.body.issue_content + '\nChi tiết : ' + req.body.description + 
+              '\nEmail: ' + req.body.email
       });
 
     channel.send({embeds:[
       em
     ]})
 
-    // TODO: Make a redirect site for both 403 and 200 status code.
-
-    return res.send("OK")
+    return res.redirect('/report-done')
   })
 
   app.get('*', (req, res) => {

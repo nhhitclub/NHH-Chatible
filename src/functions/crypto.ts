@@ -39,7 +39,7 @@ export default class CryptoService{
         const token = CryptoService.encrypt(uid, cid, tid, oid, tstmp);
 
 
-        return `/report?uid=${uid}&cid=${cid}&tk=${encodeURIComponent(token)}`;
+        return `/report?tid=${tid}&oid=${oid}&uid=${uid}&cid=${cid}&tk=${encodeURIComponent(token)}`;
     }
 
     public static extractDate(cipher: string): number{
