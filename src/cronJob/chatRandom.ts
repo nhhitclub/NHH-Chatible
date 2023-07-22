@@ -1,8 +1,5 @@
 import { FacebookController, TemplateBuilder } from "../functions/facebook";
-import { User, Chat } from "../functions/database";
 import { QueueManager } from "../functions/queueManager";
-import { v4 as uid_v4 } from "uuid";
-import { StartLog } from "../handlers/postback/procedure/chatLogProcedure";
 import { ChatController } from "../functions/chatroom";
 
 export const handleChatRandom = async () => {
@@ -15,7 +12,6 @@ export const handleChatRandom = async () => {
     const chatRoomList = queueManagerInstance.popUserToChat();
 
     chatRoomList.forEach(async (chatRoom) => {
-        console.log(chatRoom)
 
         chatManager.createRoom([chatRoom[0],chatRoom[1]])
         

@@ -1,3 +1,4 @@
+import { Schema, Types } from "mongoose";
 import { Chat, User } from "./database";
 import { DiscordClient } from "./discord";
 import { UserType, ChatType } from "./interface";
@@ -35,6 +36,7 @@ export class ChatController{
          dbData.members.map(async (member: any) => await this.cacheUserCorrect(member))
       )
       const chat: ChatType = {
+        _id: dbData._id,
         chatID: dbData.chatID,
         threadID: dbData.threadID,
         members,
@@ -52,20 +54,23 @@ export class ChatController{
       const chatID:string = id_generation()
 
       //reload type if not true
-      await allUsers.forEach(async (user, index) => {
-        if(typeof user == "string"){
-          listUser.push((await User.findOne({userID:user})) as UserType)
-          await User.findOneAndUpdate({ userID: user }, { currentChatID: chatID });// TODO: bug here
-        }else{
-          listUser[index] = (user as UserType)
-          await User.findOneAndUpdate({ userID: listUser[index].userID}, { currentChatID: chatID });// TODO: bug here
+      await Promise.all(
+        allUsers.map(async (user, index) => {
+          if(typeof user == "string"){
+            listUser.push((await User.findOne({userID:user})) as UserType)
+            await User.findOneAndUpdate({ userID: user }, { currentChatID: chatID });// TODO: bug here
+          }else{
+            listUser[index] = (user as UserType)
+            await User.findOneAndUpdate({ userID: listUser[index].userID}, { currentChatID: chatID });// TODO: bug here
 
-        }
-        //add user to cache
-        await this.userCache.push(listUser[index])
-        //add to userInfostring
-        await (userInfoString = userInfoString+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`)
-      })
+          }
+          //add user to cache
+          await this.userCache.push(listUser[index])
+          //add to userInfostring
+          userInfoString = userInfoString+` ${index+1}.**${listUser[index].userID}** - ${listUser[index].displayName}\n`
+          return user;
+        })
+      )
       
       
       const thread = await DiscordClient.createThread(
@@ -73,20 +78,22 @@ export class ChatController{
         "Log chat có ID: **"+ chatID+"**\nCác thành viên:\n"+userInfoString
       )
       
-      const userObj: any = {
+
+      const chatObj: any = {
+        _id: new Types.ObjectId(),
         chatID,
         threadID:thread.id,
         members: listUser.map(user => user.userID),
         chatMess: [],
       }
 
-      const chatModel = new Chat(userObj);
+      const chatModel = new Chat(chatObj);
       await chatModel.save()
 
-      userObj.members = listUser;
-      this.roomList.push(userObj);
+      chatObj.members = listUser;
+      this.roomList.push(chatObj);
 
-      return userObj;
+      return chatObj;
     }
 
     async addTextChatRecord(chatInput:string|ChatType,userInput:string|UserType,content:string){
@@ -109,7 +116,7 @@ export class ChatController{
 
       const chatInDB = await Chat.findOne({ chatID: chat.chatID })
       chatInDB.chatMess.push({ sender: user.userID, text: content, sent_time: Date.now() })
-      chatInDB.save()
+      await chatInDB.save()
 
     }
 

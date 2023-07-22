@@ -38,7 +38,7 @@ class FacebookController {
             .query({ access_token: process.env.MESS_API })
             .send(body_data)
             .end((err: any) => {
-                if (err) console.log('Error');
+                if (err) console.log(err);
             });
     }
 

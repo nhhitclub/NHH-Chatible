@@ -11,7 +11,7 @@ export const handlePostbackEvent = async (mess: any) => {
     let face:FacebookController = FacebookController.getInstance()
 
     let userFind = await User.findOne({ userID: mess.sender.id })
-    if(userFind.role == "banned") return face.sendTextOnlyMessage(mess.sender.id,"Tài khoản của bạn đã bị từ chối, xin cảm ơn")
+    if(userFind?.role == "banned") return face.sendTextOnlyMessage(mess.sender.id,"Tài khoản của bạn đã bị từ chối, xin cảm ơn")
     
     switch(mess.postback.payload) {
         case "CHAT_REQUEST": {

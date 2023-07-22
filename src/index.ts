@@ -32,6 +32,50 @@ mongoose.connect(process.env.MONGODB, { useNewUrlParser: true } as ConnectOption
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
+db.on('error', (err: any) => {
+  console.log('DB connection error:', err.message)
+})
+
+
+app.get("/webhook", (req: express.Request, res: express.Response) => {
+
+  const mode = req.query['hub.mode']
+  const token = req.query['hub.verify_token']
+  const challenge = req.query['hub.challenge']
+  console.log(`🟨 Received Verify Request`)
+
+  if (mode && token === process.env.VERIFY_TOKEN) {
+
+    res.status(200).send(challenge)
+  } else {
+    res.sendStatus(403)
+  }
+})
+
+
+app.post("/webhook", (req: express.Request, res: express.Response) => {
+
+
+  if (req.body.object !== "page") return res.sendStatus(404)
+  res.status(200).send("EVENT_RECEIVED")
+  // console.dir(req.body,{depth :null})
+  req.body.entry.forEach((entries: any) => {
+    entries.messaging.forEach((mess: any) => {
+      
+      if ("read" in mess) handleReadEvent(mess)
+      if ("message" in mess) handleMessageEvent(mess)
+      if ("postback" in mess) handlePostbackEvent(mess)
+      // if ("attachments" in mess) handleAttachmentsEvent(mess)
+    })
+  });
+
+})
+
+
+app.get("/ping", (req: express.Request, res: express.Response) => {
+  res.send("OK")
+})
+
 if(process.env.NEXT_DISABLE != "true"){
   const webApp:NextServer = next({dev})
   webApp.prepare()
@@ -96,50 +140,6 @@ if(process.env.NEXT_DISABLE != "true"){
 
 }
 
-
-db.on('error', (err: any) => {
-  console.log('DB connection error:', err.message)
-})
-
-
-app.get("/webhook", (req: express.Request, res: express.Response) => {
-
-  const mode = req.query['hub.mode']
-  const token = req.query['hub.verify_token']
-  const challenge = req.query['hub.challenge']
-  console.log(`🟨 Received Verify Request`)
-
-  if (mode && token === process.env.VERIFY_TOKEN) {
-
-    res.status(200).send(challenge)
-  } else {
-    res.sendStatus(403)
-  }
-})
-
-
-app.post("/webhook", (req: express.Request, res: express.Response) => {
-
-
-  if (req.body.object !== "page") return res.sendStatus(404)
-  res.status(200).send("EVENT_RECEIVED")
-  // console.dir(req.body,{depth :null})
-  req.body.entry.forEach((entries: any) => {
-    entries.messaging.forEach((mess: any) => {
-      
-      if ("read" in mess) handleReadEvent(mess)
-      if ("message" in mess) handleMessageEvent(mess)
-      if ("postback" in mess) handlePostbackEvent(mess)
-      // if ("attachments" in mess) handleAttachmentsEvent(mess)
-    })
-  });
-
-})
-
-
-app.get("/ping", (req: express.Request, res: express.Response) => {
-  res.send("OK")
-})
 
 
 app.listen(process.env.WEBPORT)

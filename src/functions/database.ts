@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose"
+import { Schema, model, Types } from "mongoose"
 import { BanSentenceType, UserType } from "./interface"
 // import * as redis from "redis"
 // import NodeCache from "node-cache"
@@ -66,6 +66,7 @@ const banSentenceSchema = new Schema<BanSentenceType>({
 })
 
 const chatSchema: Schema = new Schema({
+    _id: Types.ObjectId,
     chatID: String,
     threadID: String,
     members: [String],

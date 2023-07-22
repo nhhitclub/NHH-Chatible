@@ -1,10 +1,8 @@
 import Discord, { EmbedBuilder, ThreadChannel } from "discord.js"
-import { getLogThread } from "../../handlers/postback/procedure/chatLogProcedure";
 import { Chat } from "../../functions/database";
 import { FacebookController } from "../../functions/facebook";
 import { ChatController } from "../../functions/chatroom";
 import { DiscordClient } from "../../functions/discord";
-import { UserType } from "../../functions/interface";
 
 module.exports = {
 	data: new Discord.SlashCommandBuilder()
@@ -34,16 +32,16 @@ module.exports = {
 		
         const chatDB = await Chat.findOne({ chatID: thread.name })
         let member:Array<string> = [] 
-        console.log(targetUser)
+        
         if(targetUser){
-            console.log(1)
+            
             member.push(targetUser)
             chatManager.addTextChatRecord(thread.name,"system",`${targetUser}-${content}`)
         }else{
             chatManager.addTextChatRecord(thread.name,"system",`${content}`)
             member = chatDB.members
         }
-        console.log(targetUser)
+        
         const msg = "Tin nhắn đến từ admin: " + content;
         member.forEach(async (mem) => {
             // console.log(mem)

@@ -36,12 +36,7 @@ export const InChatHandle: Function = async (mess: any, userInDB: any, callback:
                 console.log('error while sending attachment')
             }
             
-            await chatInDB.chatMess.push({ 
-                sender: userID, 
-                attachmentURL: attachment.payload.url, 
-                sent_time: mess.timestamp
-            })
-            await LogChat(chatInDB.threadID, userID, attachment.payload.url)
+            chatManager.addTextChatRecord(userInDB.currentChatID,userID, attachment.payload.url)
 
         });
     }

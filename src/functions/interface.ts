@@ -1,3 +1,4 @@
+
 export type UserType = {
     userID: string,
     role: string,
@@ -22,9 +23,7 @@ export type MessageType = {
 }
 
 export type ChatType = {
-    _doc?: {
-        _id?: string
-    },
+    _id?: any,
     chatID: string,
     threadID: string,
     members: Array<UserType>,

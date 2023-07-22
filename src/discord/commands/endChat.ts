@@ -18,14 +18,16 @@ module.exports = {
         // const fbChannelID = interaction.options.getChannel('channel')?.name || (await ChatController.getInstance().findChatRecordByThreadId(interaction.channelId)).chatID;
         
         const chatInfo:ChatType = 
-            await (chatManager.findChatRecord(
-                    interaction.options.getChannel('channel')?.name
-            ) || ChatController.getInstance().findChatRecordByThreadId(interaction.channelId))
+            (interaction.options.getChannel('channel')) ? await chatManager.findChatRecord(
+                interaction.options.getChannel('channel').name
+            ) : await ChatController.getInstance().findChatRecordByThreadId(interaction.channelId)
+
+        console.log(chatInfo)
 
         const embed:EmbedBuilder = new EmbedBuilder()
             .setColor(0x0099FF)
             .addFields({
-                name: 'kết thúc đoạn chat: ' + chatInfo.chatID,
+                name: 'kết thúc đoạn chat: ' + chatInfo?.chatID,
                 value: 'Đoạn chat đã kết thúc bởi '+(await interaction.guild.members.fetch(interaction.user.id)).user.username
 
             });
@@ -33,8 +35,8 @@ module.exports = {
         try{
             chatManager.endChatRecord(chatInfo,"system")
 
-            await chatInfo.members.forEach(async (member) => {
-                await EndChatMessage(member.userID, chatInfo, true)
+            await chatInfo.members.forEach(async (member: any) => {
+                await EndChatMessage(member.userID || member, chatInfo, true)
             })
 
             // await EndChatProcedure(fbChannelID, true);
