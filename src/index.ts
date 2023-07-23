@@ -11,9 +11,6 @@ import { handlePostbackEvent } from "./handlers/event/handlePostbackEvent"
 import { handleMessageEvent } from "./handlers/event/handleMessageEvent"
 import { handleChatRandom } from "./cronJob/chatRandom"
 import { NextServer } from "next/dist/server/next"
-import CryptoService from "./functions/crypto";
-import { Chat } from "./functions/database";
-import { EmbedBuilder, TextChannel } from "discord.js";
 import onSubmitHandle from "./handlers/report/onSubmitHandle";
 import tokenValidateMiddleware from "./handlers/report/tokenValidateMiddleware";
 

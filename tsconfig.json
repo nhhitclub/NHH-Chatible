@@ -2,7 +2,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "src/**/*"
   ],
   "compilerOptions": {
     "target": "es2021",
@@ -23,8 +24,8 @@
     "noImplicitAny": true,
     "skipLibCheck": false,
     "strict": false,
-    "noEmit": true,
-    "incremental": true
+    "incremental": true,
+    "noEmit": true
   },
   "exclude": [
     "dist",
