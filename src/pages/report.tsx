@@ -12,7 +12,7 @@ export default function () {
                         <label htmlFor="email" className="form-label">
                             Địa chỉ email của bạn
                         </label>
-                        <input type="email" required className="form-control" name="email" />
+                        <input type="email" className="form-control" name="email" />
                     </div>
                     <div className="mb-3">
                         <label className="form-label">

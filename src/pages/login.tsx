@@ -14,10 +14,11 @@ export default function () {
                             <div>Đây là nút đăng nhập</div>
                             <input type="submit" value="Đăng nhập" className="btn btn-primary" />
                             <div>Đây cũng là nút đăng nhập</div>
-                            <input type="submit" value="Cũng là đăng nhập nhưng là màu xanh" className="btn btn-success" />
+                            <input type="submit" value="Cũng là đăng nhập nhưng là màu xanh" className="btn btn-success"  />
                             <div>Chỗ này mới là nút đăng nhập nè</div>
                             <input type="submit" value="Cũng là đăng nhập nhưng là màu đỏ" className="btn btn-danger" />
                         </form>
+                        
                     </div>
                 </div>
             </div>
